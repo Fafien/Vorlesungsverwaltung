@@ -29,13 +29,13 @@ public class Course implements Serializable {
     @GeneratedValue
     private long id;
 
-    private String kursbezeichnung;
+    private String courseName;
 
     @ManyToOne
     private List<User> user;
 
     @OneToMany
-    private List<Lecture> lecture;
+    private List<Lecture> lectures;
 
     //<editor-fold defaultstate="collapsed" desc="Konstruktoren">
     public Course() {
@@ -56,12 +56,12 @@ public class Course implements Serializable {
         this.id = id;
     }
 
-    public String getKursbezeichnung() {
-        return kursbezeichnung;
+    public String getCourseName() {
+        return courseName;
     }
 
-    public void setKursbezeichnung(String kursbezeichnung) {
-        this.kursbezeichnung = kursbezeichnung;
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
     public List<User> getUser() {
@@ -72,20 +72,20 @@ public class Course implements Serializable {
         this.user = user;
     }
 
-    public List<Lecture> getLecture() {
-        return lecture;
+    public List<Lecture> getLectures() {
+        return lectures;
     }
 
-    public void setLecture(List<Lecture> lecture) {
-        this.lecture = lecture;
+    public void setLectures(List<Lecture> lectures) {
+        this.lectures = lectures;
     }
 
     public void addLecture(Lecture lecture) {
-        this.lecture.add(lecture);
+        this.lectures.add(lecture);
     }
 
     public void removeLecture(Lecture lecture) {
-        this.lecture.remove(lecture);
+        this.lectures.remove(lecture);
     }
     //</editor-fold>
 
@@ -111,7 +111,7 @@ public class Course implements Serializable {
         if (this.id != other.id) {
             return false;
         }
-        if (!Objects.equals(this.kursbezeichnung, other.kursbezeichnung)) {
+        if (!Objects.equals(this.courseName, other.courseName)) {
             return false;
         }
         return true;
