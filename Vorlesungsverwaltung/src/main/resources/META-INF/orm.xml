@@ -6,7 +6,7 @@
     
     <persistence-unit-metadata>
         <persistence-unit-defaults>
-            <schema>Vorlesungsverwaltung</schema>
+            <schema>vorlesungsverwaltung</schema>
         </persistence-unit-defaults>
     </persistence-unit-metadata>
     
