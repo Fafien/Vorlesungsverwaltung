@@ -32,7 +32,7 @@ public class Course implements Serializable {
 
     private String courseName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
     private List<User> users;
 
     @OneToMany

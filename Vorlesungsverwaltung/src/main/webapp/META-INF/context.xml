@@ -13,7 +13,7 @@
             userNameCol    = "username"
             userCredCol    = "password_hash"
 
-            userRoleTable  = "vorlesungsverwaltung.user_group"
+            userRoleTable  = "vorlesungsverwaltung.vorlesungsverwaltung_user_group"
             roleNameCol    = "groupname"
         >
             <CredentialHandler
