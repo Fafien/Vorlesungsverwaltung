@@ -14,17 +14,12 @@ import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBContext;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 /**
  * Spezielle EJB zum Anlegen eines Benutzers und Aktualisierung des Passworts.
  */
 @Stateless
 public class UserBean extends EntityBean<User, String> {
-
-    @PersistenceContext
-    EntityManager em;
 
     @Resource
     EJBContext ctx;
