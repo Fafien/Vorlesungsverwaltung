@@ -35,7 +35,7 @@ public class Course implements Serializable {
     @OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
     private List<User> users;
 
-    @OneToMany
+    @OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
     private List<Lecture> lectures;
 
     //<editor-fold defaultstate="collapsed" desc="Konstruktoren">
