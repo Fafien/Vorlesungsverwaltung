@@ -9,11 +9,6 @@
  */
 package vorlesungsverwaltung.lectures.web;
 
-import vorlesungsverwaltung.lectures.ejb.CategoryBean;
-import vorlesungsverwaltung.lectures.ejb.TaskBean;
-import vorlesungsverwaltung.lectures.jpa.Category;
-import vorlesungsverwaltung.lectures.jpa.Task;
-import vorlesungsverwaltung.lectures.jpa.TaskStatus;
 import java.io.IOException;
 import java.util.List;
 import javax.ejb.EJB;
@@ -28,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(urlPatterns = {"/app/tasks/list/"})
 public class TaskListServlet extends HttpServlet {
-
+/*
     @EJB
     private CategoryBean categoryBean;
     
@@ -74,5 +69,5 @@ public class TaskListServlet extends HttpServlet {
 
         // Anfrage an die JSP weiterleiten
         request.getRequestDispatcher("/WEB-INF/tasks/task_list.jsp").forward(request, response);
-    }
+    }*/
 }

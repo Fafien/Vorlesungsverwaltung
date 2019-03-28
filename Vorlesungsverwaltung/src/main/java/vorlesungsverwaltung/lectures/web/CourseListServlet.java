@@ -25,6 +25,7 @@ import vorlesungsverwaltung.lectures.ejb.CourseBean;
 import vorlesungsverwaltung.lectures.ejb.LectureBean;
 import vorlesungsverwaltung.lectures.jpa.Course;
 import vorlesungsverwaltung.lectures.jpa.Lecture;
+import vorlesungsverwaltung.lectures.ejb.LectureBean;
 
 /**
  * Seite zum Anzeigen und Bearbeiten der Kategorien. Die Seite besitzt ein

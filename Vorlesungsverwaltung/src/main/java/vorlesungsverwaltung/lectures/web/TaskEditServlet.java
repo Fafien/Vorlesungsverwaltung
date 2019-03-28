@@ -11,12 +11,8 @@ package vorlesungsverwaltung.lectures.web;
 
 import vorlesungsverwaltung.common.web.WebUtils;
 import vorlesungsverwaltung.common.web.FormValues;
-import vorlesungsverwaltung.lectures.ejb.CategoryBean;
-import vorlesungsverwaltung.lectures.ejb.TaskBean;
 import vorlesungsverwaltung.common.ejb.UserBean;
 import vorlesungsverwaltung.common.ejb.ValidationBean;
-import vorlesungsverwaltung.lectures.jpa.Task;
-import vorlesungsverwaltung.lectures.jpa.TaskStatus;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
@@ -37,7 +33,7 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(urlPatterns = "/app/tasks/task/*")
 public class TaskEditServlet extends HttpServlet {
-
+/*
     @EJB
     TaskBean taskBean;
 
@@ -96,7 +92,7 @@ public class TaskEditServlet extends HttpServlet {
                 break;
         }
     }
-
+*/
     /**
      * Aufgerufen in doPost(): Neue oder vorhandene Aufgabe speichern
      *
@@ -104,7 +100,7 @@ public class TaskEditServlet extends HttpServlet {
      * @param response
      * @throws ServletException
      * @throws IOException
-     */
+     *//*
     private void saveTask(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -175,7 +171,7 @@ public class TaskEditServlet extends HttpServlet {
             response.sendRedirect(request.getRequestURI());
         }
     }
-
+*/
     /**
      * Aufgerufen in doPost: Vorhandene Aufgabe löschen
      *
@@ -183,7 +179,7 @@ public class TaskEditServlet extends HttpServlet {
      * @param response
      * @throws ServletException
      * @throws IOException
-     */
+     *//*
     private void deleteTask(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -202,7 +198,7 @@ public class TaskEditServlet extends HttpServlet {
      *
      * @param request HTTP-Anfrage
      * @return Zu bearbeitende Aufgabe
-     */
+     *//*
     private Task getRequestedTask(HttpServletRequest request) {
         // Zunächst davon ausgehen, dass ein neuer Satz angelegt werden soll
         Task task = new Task();
@@ -242,7 +238,7 @@ public class TaskEditServlet extends HttpServlet {
      *
      * @param task Die zu bearbeitende Aufgabe
      * @return Neues, gefülltes FormValues-Objekt
-     */
+     *//*
     private FormValues createTaskForm(Task task) {
         Map<String, String[]> values = new HashMap<>();
 
@@ -280,5 +276,5 @@ public class TaskEditServlet extends HttpServlet {
         formValues.setValues(values);
         return formValues;
     }
-
+*/
 }
