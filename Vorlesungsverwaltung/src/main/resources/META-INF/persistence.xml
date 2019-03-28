@@ -13,7 +13,7 @@
 
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="create"/>
-
+            
             <!-- TomEE -->
             <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)" />
             <!-- TomEE -->

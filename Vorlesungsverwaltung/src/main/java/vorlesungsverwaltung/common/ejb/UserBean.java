@@ -53,7 +53,7 @@ public class UserBean extends EntityBean<User, String> {
         }
 
         User user = new User(username, password, firstName, lastName);
-        user.addToGroup("app-user");
+        user.addToGroup("vorlesungsverwaltung-user");
         em.persist(user);
     }
 
