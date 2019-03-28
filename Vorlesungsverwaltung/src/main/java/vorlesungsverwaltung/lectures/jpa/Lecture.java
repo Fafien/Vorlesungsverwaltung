@@ -45,6 +45,8 @@ public class Lecture implements Serializable {
 
     @OneToMany
     private List<Appointment> appointment;
+    
+    private boolean deleted;
 
     public Lecture() {
     }
@@ -54,6 +56,7 @@ public class Lecture implements Serializable {
         this.lectureName = lectureName;
         this.lecturer = lecturer;
         this.appointment = appointment;
+        this.deleted = false;
     }
 
     public long getId() {
@@ -95,4 +98,13 @@ public class Lecture implements Serializable {
     public void setAppointment(List<Appointment> appointment) {
         this.appointment = appointment;
     }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+    
 }
