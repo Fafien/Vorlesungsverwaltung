@@ -35,7 +35,7 @@ public class DashboardContent implements DashboardContentProvider {
         DashboardSection section = this.createSection(null);
         sections.add(section);
 
-        List<Course> courses = this.courseBean.findAllSorted();
+        List<Course> courses = this.courseBean.findAll();
 
         for (Course course : courses) {
             section = this.createSection(course);
@@ -47,10 +47,10 @@ public class DashboardContent implements DashboardContentProvider {
         // Neue Rubrik im Dashboard erzeugen
         DashboardSection section = new DashboardSection();
         String cssClass = "";
-        String status;
+        String status = new String();
 
         if (course != null) {
-            section.setLabel(course.getName());
+            section.setLabel(course.getCourseName());
         } else {
             section.setLabel("Alle Kategorien");
             cssClass = "overview";
@@ -83,7 +83,7 @@ public class DashboardContent implements DashboardContentProvider {
                     break;
             }
             
-            String cssClass1 = cssClass + " status-" + status.toLowerCase();
+            String cssClass1 = cssClass + " status-" + status;
             
             tile = this.createTile(course, status, status, cssClass1, icon);
             section.getTiles().add(tile);
