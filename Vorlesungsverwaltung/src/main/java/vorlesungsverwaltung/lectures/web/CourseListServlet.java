@@ -21,8 +21,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import vorlesungsverwaltung.course.ejb.CourseBean;
-import vorlesungsverwaltung.course.jpa.Course;
+import vorlesungsverwaltung.lectures.ejb.CourseBean;
+import vorlesungsverwaltung.lectures.jpa.Course;
 import vorlesungsverwaltung.lectures.jpa.Lecture;
 
 /**

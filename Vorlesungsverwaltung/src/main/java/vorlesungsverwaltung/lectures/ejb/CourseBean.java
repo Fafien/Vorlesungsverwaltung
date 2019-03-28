@@ -7,11 +7,11 @@
  * Dieser Quellcode ist lizenziert unter einer
  * Creative Commons Namensnennung 4.0 International Lizenz.
  */
-package vorlesungsverwaltung.course.ejb;
+package vorlesungsverwaltung.lectures.ejb;
 
 import javax.ejb.Stateless;
 import vorlesungsverwaltung.common.ejb.EntityBean;
-import vorlesungsverwaltung.course.jpa.Course;
+import vorlesungsverwaltung.lectures.jpa.Course;
 
 /**
  *

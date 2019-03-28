@@ -18,8 +18,8 @@ import javax.servlet.http.HttpSession;
 import vorlesungsverwaltung.common.ejb.UserBean;
 import vorlesungsverwaltung.common.ejb.ValidationBean;
 import vorlesungsverwaltung.common.jpa.User;
-import vorlesungsverwaltung.course.ejb.CourseBean;
-import vorlesungsverwaltung.course.jpa.Course;
+import vorlesungsverwaltung.lectures.ejb.CourseBean;
+import vorlesungsverwaltung.lectures.jpa.Course;
 
 /**
  *
