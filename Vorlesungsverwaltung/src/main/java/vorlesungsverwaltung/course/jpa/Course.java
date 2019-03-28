@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import vorlesungsverwaltung.common.jpa.User;
+import vorlesungsverwaltung.lectures.jpa.Lecture;
 
 /**
  *
