@@ -1,9 +1,9 @@
 /*
  * Copyright © 2018 Dennis Schulmeister-Zimolong
- * 
+ *
  * E-Mail: dhbw@windows3.de
  * Webseite: https://www.wpvs.de/
- * 
+ *
  * Dieser Quellcode ist lizenziert unter einer
  * Creative Commons Namensnennung 4.0 International Lizenz.
  */
@@ -22,14 +22,14 @@ import vorlesungsverwaltung.lectures.jpa.Course;
  */
 @Stateless
 @RolesAllowed("app-user")
-public class LectureBean extends EntityBean<Lecture, Long> { 
-   
+public class LectureBean extends EntityBean<Lecture, Long> {
+
     public LectureBean() {
         super(Lecture.class);
     }
-    
+
     public List<Lecture> searchDeleted(Course course) {
-        
+
         return em.createQuery("SELECT l FROM Lecture l, Appointment a "
                 + "WHERE l.course = :course "
                 + "AND l.deleted = :deleted"
@@ -37,13 +37,13 @@ public class LectureBean extends EntityBean<Lecture, Long> {
                 .setParameter("course", course)
                 .setParameter("deleted", true)
                 .getResultList();
-        
+
     }
-    
+
     public List<Lecture> searchBefore(Course course) {
-        
+
         Date date = new Date();
-        
+
         return em.createQuery("SELECT l FROM Lecture l "
                 + "WHERE l.course = :course "
                 + "AND l.deleted = :deleted "
@@ -53,13 +53,13 @@ public class LectureBean extends EntityBean<Lecture, Long> {
                 .setParameter("deleted", false)
                 .setParameter("date", date)
                 .getResultList();
-        
+
     }
-    
+
     public List<Lecture> searchAfter(Course course) {
-        
+
         Date date = new Date();
-        
+
         return em.createQuery("SELECT l FROM Lecture l "
                 + "WHERE l.course = :course "
                 + "AND l.deleted = :deleted "
@@ -69,13 +69,13 @@ public class LectureBean extends EntityBean<Lecture, Long> {
                 .setParameter("deleted", false)
                 .setParameter("date", date)
                 .getResultList();
-        
+
     }
-    
+
     public List<Lecture> searchToday(Course course) {
-        
+
         Date date = new Date();
-        
+
         return em.createQuery("SELECT l FROM Lecture l "
                 + "WHERE l.course = :course "
                 + "AND l.deleted = :deleted "
@@ -85,6 +85,13 @@ public class LectureBean extends EntityBean<Lecture, Long> {
                 .setParameter("deleted", false)
                 .setParameter("date", date)
                 .getResultList();
-  
+
+    }
+
+    public List<Lecture> searchByCourse(Course course) {
+        return em.createQuery("SELECT l FROM Lecture l WHERE l.course = :course"
+                + "ORDER BY l.appiontment.date, l.appointment.time")
+                .setParameter("course", course)
+                .getResultList();
     }
 }
