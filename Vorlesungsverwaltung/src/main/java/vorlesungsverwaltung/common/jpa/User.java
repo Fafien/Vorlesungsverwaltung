@@ -11,6 +11,7 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -57,7 +58,7 @@ public class User implements Serializable {
     @Column(name = "GROUPNAME")
     private List<String> groups = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private Course course;
 
     //<editor-fold defaultstate="collapsed" desc="Konstruktoren">
