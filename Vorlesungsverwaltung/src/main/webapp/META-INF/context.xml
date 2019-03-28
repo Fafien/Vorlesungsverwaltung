@@ -9,11 +9,11 @@
             className      = "org.apache.catalina.realm.DataSourceRealm"
 
             dataSourceName = "Default-Database-Unmanaged"
-            userTable      = "jtodo.jtodo_user"
+            userTable      = "vorlesungsverwaltung.vorlesungsverwaltung_user"
             userNameCol    = "username"
             userCredCol    = "password_hash"
 
-            userRoleTable  = "jtodo.jtodo_user_group"
+            userRoleTable  = "vorlesungsverwaltung.user_group"
             roleNameCol    = "groupname"
         >
             <CredentialHandler
