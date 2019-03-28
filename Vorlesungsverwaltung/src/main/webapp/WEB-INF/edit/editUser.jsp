@@ -56,7 +56,7 @@
                         <div class="form-group">
                             <select class="js-example-basic-multiple col-md-10 form-control" name="coursename" id="courseSelect" required="required" placeholder="Kurs">
                                 <c:forEach items="${courses}" var="course">
-                                    <option value="${course}" ${course.courseName eq currentCourse.courseName ? ' selected' : ''}>${course.courseName}</option>
+                                    <option value="${course}" ${course.courseName eq "${edit_form.values['username'][0]}" ? ' selected' : ''}>${course.courseName}</option>
                                 </c:forEach>
                             </select>
                         </div>

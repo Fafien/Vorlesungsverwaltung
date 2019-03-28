@@ -7,7 +7,9 @@ package vorlesungsverwaltung.common.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -49,12 +51,13 @@ public class EditUserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        User currentUser = this.userBean.getCurrentUser();
         HttpSession session = request.getSession();
-        session.setAttribute("courses", this.courseBean.findAll());
-        session.setAttribute("selectedCourse", this.userBean.getCurrentUser().getCourse());
 
+        session.setAttribute("courses", this.courseBean.findAll());
+        FormValues form = this.getFormValuesForCurrentUser(currentUser);
+        session.setAttribute("edit_form", form);
         request.getRequestDispatcher(request.getContextPath() + "/WEB-INF/user/editUser.jsp");
-        session.removeAttribute("edit_form");
     }
 
     /**
@@ -82,7 +85,7 @@ public class EditUserServlet extends HttpServlet {
         User user = this.userBean.findById(username);
         List<String> errors = new ArrayList<>();
 
-        //Prüfen, ob altes Passwort stimmt
+        //TOOD: altes Passwort muss vor dem Vergleich gehashed werden
         if (!oldPassword.equals(user.getPassword())) {
             errors.add("Das alte Passwort stimmt nicht mit Ihrem aktuellen Passwort überein");
         }
@@ -107,5 +110,19 @@ public class EditUserServlet extends HttpServlet {
             session.setAttribute("edit_form", form);
             response.sendRedirect(request.getRequestURI());
         }
+    }
+
+    private FormValues getFormValuesForCurrentUser(User currentUser) {
+        FormValues form = new FormValues();
+
+        Map<String, String[]> formValues = new HashMap<>();
+        formValues.put("username", new String[]{currentUser.getUsername()});
+        formValues.put("firstname", new String[]{currentUser.getFirstName()});
+        formValues.put("lastname", new String[]{currentUser.getLastName()});
+        formValues.put("currentCourseName", new String[]{currentUser.getCourse().getCourseName()});
+
+        form.setValues(formValues);
+
+        return form;
     }
 }
