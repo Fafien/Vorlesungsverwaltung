@@ -37,6 +37,16 @@ public class Course implements Serializable {
     @OneToMany
     private List<Lecture> lecture;
 
+    //<editor-fold defaultstate="collapsed" desc="Konstruktoren">
+    public Course() {
+
+    }
+
+    public Course(String kursbezeichnung) {
+
+    }
+    //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="Getter and Setter">
     public long getId() {
         return id;
