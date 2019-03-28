@@ -24,6 +24,7 @@
                 <div class="card-header">Benutzerdaten ändern</div>
                 <div class="card-body">
                     <form method="post" class="stacked">
+                        <input type="hidden" name="csrf_token" value="${csrf_token}">
                         <%-- Eingabefelder --%>
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
@@ -56,7 +57,7 @@
                         <div class="form-group">
                             <select class="js-example-basic-multiple col-md-10 form-control" name="coursename" id="courseSelect" required="required" placeholder="Kurs">
                                 <c:forEach items="${courses}" var="course">
-                                    <option value="${course}" ${course.courseName eq "${edit_form.values['username'][0]}" ? ' selected' : ''}>${course.courseName}</option>
+                                    <option value="${course.courseName}" ${course.courseName eq "${edit_form.values['currentCourseName'][0]}" ? ' selected' : ''}>${course.courseName}</option>
                                 </c:forEach>
                             </select>
                         </div>

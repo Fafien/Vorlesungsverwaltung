@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -50,14 +51,17 @@ public class EditUserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        //TODO: Design der Seite, bootstrap in base.tag hinzufügen
         request.setCharacterEncoding("UTF-8");
         User currentUser = this.userBean.getCurrentUser();
         HttpSession session = request.getSession();
-
+        //TODO: Prüfen, wenn kein Kurs vorhanden + was tun, wenn kein Kurs existiert?
         session.setAttribute("courses", this.courseBean.findAll());
         FormValues form = this.getFormValuesForCurrentUser(currentUser);
         session.setAttribute("edit_form", form);
-        request.getRequestDispatcher(request.getContextPath() + "/WEB-INF/user/editUser.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/edit/editUser.jsp");
+        dispatcher.forward(request, response);
     }
 
     /**
@@ -79,7 +83,7 @@ public class EditUserServlet extends HttpServlet {
         String oldPassword = request.getParameter("oldPassword");
         String firstName = request.getParameter("firstname");
         String lastName = request.getParameter("lastname");
-        String courseName = request.getParameter("course");
+        String courseName = request.getParameter("coursename");
         Course course = this.courseBean.findByCourseName(courseName);
 
         User user = this.userBean.findById(username);
@@ -88,6 +92,7 @@ public class EditUserServlet extends HttpServlet {
         if (!user.checkPassword(oldPassword)) {
             errors.add("Sie haben ein falsches Passwort eingegeben!");
         }
+        //TODO: Passwort muss nicht geändert werden --> leerer String oder null prüfen
         if (newPassword != null && newPasswordConfirm != null && !newPassword.equals(newPasswordConfirm)) {
             errors.add("Die beiden Passwörter stimmen nicht überein.");
         }
@@ -113,12 +118,18 @@ public class EditUserServlet extends HttpServlet {
 
     private FormValues getFormValuesForCurrentUser(User currentUser) {
         FormValues form = new FormValues();
+        Course course = currentUser.getCourse();
+        String courseName = "";
+
+        if (course != null) {
+            courseName = course.getCourseName();
+        }
 
         Map<String, String[]> formValues = new HashMap<>();
         formValues.put("username", new String[]{currentUser.getUsername()});
         formValues.put("firstname", new String[]{currentUser.getFirstName()});
         formValues.put("lastname", new String[]{currentUser.getLastName()});
-        formValues.put("currentCourseName", new String[]{currentUser.getCourse().getCourseName()});
+        formValues.put("currentCourseName", new String[]{courseName});
 
         form.setValues(formValues);
 
