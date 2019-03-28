@@ -1,22 +1,12 @@
-/*
- * Copyright © 2018 Dennis Schulmeister-Zimolong
- * 
- * E-Mail: dhbw@windows3.de
- * Webseite: https://www.wpvs.de/
- * 
- * Dieser Quellcode ist lizenziert unter einer
- * Creative Commons Namensnennung 4.0 International Lizenz.
- */
 package vorlesungsverwaltung.common.jpa;
 
-import vorlesungsverwaltung.lectures.jpa.Task;
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-import javax.persistence.CascadeType;
+import java.util.Objects;
+import java.util.Random;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -26,60 +16,61 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import vorlesungsverwaltung.course.jpa.Course;
 
-/**
- * Datenbankklasse für einen Benutzer.
- */
 @Entity
-@Table(name = "JTODO_USER")
+@Table(name = "VORLESUNGSVERWALTUNG_USER")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+
+    @Column(name = "uniqueNumber")
+    private Long uniqueNumber;
 
     @Id
     @Column(name = "USERNAME", length = 64)
-    @Size(min = 5, max = 64, message = "Der Benutzername muss zwischen fünf und 64 Zeichen lang sein.")
-    @NotNull(message = "Der Benutzername darf nicht leer sein.")
-    private String username;
-    
-    public class Password {
-        @Size(min = 6, max = 64, message = "Das Passwort muss zwischen sechs und 64 Zeichen lang sein.")
-        public String password = "";
-    }
-    @Transient
-    private final Password password = new Password();
+    @Size(min = 5, max = 64, message = "Ihr gewünschter Benutzername darf nur zwischen 5 und 64 Zeichen lang sein")
+    @NotNull(message = "Bitte geben Sie einen Benutzernamen ein!")
+    private String username = "";
 
+    @NotNull(message = "Bitte geben Sie ihren Vornamen ein!")
+    private String firstName = "";
+
+    @NotNull(message = "Bitte geben Sie ihren Nachnamen ein!")
+    private String lastName = "";
+
+    //Length 64 reuqired becuase of sha-256
     @Column(name = "PASSWORD_HASH", length = 64)
-    @NotNull(message = "Das Passwort darf nicht leer sein.")
-    private String passwordHash;
+    @NotNull(message = "Bitte geben Sie ein Passwort ein!")
+    private String password = "";
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
-            name = "JTODO_USER_GROUP",
+            name = "USER_GROUP",
             joinColumns = @JoinColumn(name = "USERNAME")
     )
     @Column(name = "GROUPNAME")
-    List<String> groups = new ArrayList<>();
+    private List<String> groups = new ArrayList<>();
 
-    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    List<Task> tasks = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private Course course;
 
-    //<editor-fold defaultstate="collapsed" desc="Konstruktoren">
+    //<editor-fold defaultstate="collapsed" desc="Konstruktor">
     public User() {
     }
 
-    public User(String username, String password) {
+    public User(String username, String password, String firstName, String lastName) {
         this.username = username;
-        this.password.password = password;
-        this.passwordHash = this.hashPassword(password);
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.uniqueNumber = Long.parseLong(new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime()) + (10000 + new Random().nextInt(90000))); //aktuelles Datum + Zeit + 5 stellige Random Zahl
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Setter und Getter">
+    //<editor-fold defaultstate="collapsed" desc="Getter&Setter">
     public String getUsername() {
         return username;
     }
@@ -88,89 +79,22 @@ public class User implements Serializable {
         this.username = id;
     }
 
-    public List<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Passwort setzen und prüfen">
-    /**
-     * Berechnet der Hash-Wert zu einem Passwort.
-     *
-     * @param password Passwort
-     * @return Hash-Wert
-     */
-    private String hashPassword(String password) {
-        byte[] hash;
-
-        if (password == null) {
-            password = "";
-        }
-
-        // Hashwert zum Passwort berechnen
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-        } catch (NoSuchAlgorithmException ex) {
-            hash = "!".getBytes(StandardCharsets.UTF_8);
-        }
-
-        // Hashwert in einen Hex-String umwandeln
-        // Vgl. https://stackoverflow.com/a/9855338
-        char[] hashHex = new char[hash.length * 2];
-
-        for (int i = 0; i < hash.length; i++) {
-            int v = hash[i] & 0xFF;
-            hashHex[i * 2] = HEX_ARRAY[v >>> 4];
-            hashHex[i * 2 + 1] = HEX_ARRAY[v & 0x0F];
-        }
-
-        return new String(hashHex);
-    }
-
-    /**
-     * Berechnet einen Hashwert aus dem übergebenen Passwort und legt ihn im
-     * Feld passwordHash ab. Somit wird das Passwort niemals als Klartext
-     * gespeichert.
-     * 
-     * Gleichzeitig wird das Passwort im nicht gespeicherten Feld password
-     * abgelegt, um durch die Bean Validation Annotationen überprüft werden
-     * zu können.
-     *
-     * @param password Neues Passwort
-     */
     public void setPassword(String password) {
-        this.password.password = password;
-        this.passwordHash = this.hashPassword(password);
+        this.password = password;
     }
 
-    /**
-     * Nur für die Validierung bei einer Passwortänderung!
-     * @return Neues, beim Speichern gesetztes Passwort
-     */
-    public Password getPassword() {
+    public String getPassword() {
         return this.password;
     }
-    
-    /**
-     * Prüft, ob das übergebene Passwort korrekt ist.
-     *
-     * @param password Zu prüfendes Passwort
-     * @return true wenn das Passwort stimmt sonst false
-     */
-    public boolean checkPassword(String password) {
-        return this.passwordHash.equals(this.hashPassword(password));
-    }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Zuordnung zu Benutzergruppen">
-    /**
-     * @return Eine unveränderliche Liste aller Benutzergruppen
-     */
+    public Long getUniqueNumber() {
+        return uniqueNumber;
+    }
+
+    public void setUniqueNumber(Long uniqueNumber) {
+        this.uniqueNumber = uniqueNumber;
+    }
+
     public List<String> getGroups() {
         List<String> groupsCopy = new ArrayList<>();
 
@@ -181,25 +105,85 @@ public class User implements Serializable {
         return groupsCopy;
     }
 
-    /**
-     * Fügt den Benutzer einer weiteren Benutzergruppe hinzu.
-     *
-     * @param groupname Name der Benutzergruppe
-     */
     public void addToGroup(String groupname) {
         if (!this.groups.contains(groupname)) {
             this.groups.add(groupname);
         }
     }
 
-    /**
-     * Entfernt den Benutzer aus der übergebenen Benutzergruppe.
-     *
-     * @param groupname Name der Benutzergruppe
-     */
     public void removeFromGroup(String groupname) {
         this.groups.remove(groupname);
     }
-    //</editor-fold>
 
+    public String getFirstName() {
+        return this.firstName;
+    }
+
+    public String getLastName() {
+        return this.lastName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Equals and hashCode">
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 71 * hash + Objects.hashCode(this.uniqueNumber);
+        hash = 71 * hash + Objects.hashCode(this.username);
+        hash = 71 * hash + Objects.hashCode(this.password);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final User other = (User) obj;
+        if (!Objects.equals(this.username, other.username)) {
+            return false;
+        }
+        if (!Objects.equals(this.password, other.password)) {
+            return false;
+        }
+        if (!Objects.equals(this.firstName, other.firstName)) {
+            return false;
+        }
+        if (!Objects.equals(this.lastName, other.lastName)) {
+            return false;
+        }
+        if (!Objects.equals(this.uniqueNumber, other.uniqueNumber)) {
+            return false;
+        }
+        return true;
+    }
+//</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Weitere Methoden">
+    public boolean checkPassword(String password) {
+        return this.password.equals(password);
+    }
+    //</editor-fold>
 }
