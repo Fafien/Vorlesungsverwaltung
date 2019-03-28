@@ -28,7 +28,7 @@ public class CourseBean extends EntityBean<Course, Long> {
 
     public Course findByCourseName(String courseName) {
         return (Course) this.em.createQuery("SELECT c FROM Course c WHERE c.courseName = :courseName")
-                .setParameter("kurzbezeichnung", courseName)
+                .setParameter("courseName", courseName)
                 .getSingleResult();
     }
 }
