@@ -25,4 +25,10 @@ public class CourseBean extends EntityBean<Course, Long> {
         super(Course.class);
     }
     //</editor-fold>
+
+    public Course findByCourseName(String courseName) {
+        return (Course) this.em.createQuery("SELECT c FROM Course c WHERE c.kursbezeichnung = :kursbezeichnung")
+                .setParameter("kurzbezeichnung", courseName)
+                .getSingleResult();
+    }
 }
