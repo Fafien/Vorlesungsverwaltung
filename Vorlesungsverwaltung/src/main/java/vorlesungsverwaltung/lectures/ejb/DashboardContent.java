@@ -13,99 +13,79 @@ import vorlesungsverwaltung.common.web.WebUtils;
 import vorlesungsverwaltung.dashboard.ejb.DashboardContentProvider;
 import vorlesungsverwaltung.dashboard.ejb.DashboardSection;
 import vorlesungsverwaltung.dashboard.ejb.DashboardTile;
-import vorlesungsverwaltung.lectures.jpa.Category;
-import vorlesungsverwaltung.lectures.jpa.TaskStatus;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import vorlesungsverwaltung.lectures.jpa.Course;
 
 /**
  * EJB zur Definition der Dashboard-Kacheln für Aufgaben.
  */
-@Stateless(name = "tasks")
+@Stateless(name = "lectures")
 public class DashboardContent implements DashboardContentProvider {
 
     @EJB
-    private CategoryBean categoryBean;
+    private CourseBean courseBean;
 
     @EJB
-    private TaskBean taskBean;
+    private LectureBean lectureBean;
 
-    /**
-     * Vom Dashboard aufgerufenen Methode, um die anzuzeigenden Rubriken und
-     * Kacheln zu ermitteln.
-     *
-     * @param sections Liste der Dashboard-Rubriken, an die die neuen Rubriken
-     * angehängt werden müssen
-     */
     @Override
     public void createDashboardContent(List<DashboardSection> sections) {
-        // Zunächst einen Abschnitt mit einer Gesamtübersicht aller Aufgaben
-        // in allen Kategorien erzeugen
         DashboardSection section = this.createSection(null);
         sections.add(section);
 
-        // Anschließend je Kategorie einen weiteren Abschnitt erzeugen
-        List<Category> categories = this.categoryBean.findAllSorted();
+        List<Course> courses = this.courseBean.findAllSorted();
 
-        for (Category category : categories) {
-            section = this.createSection(category);
+        for (Course course : courses) {
+            section = this.createSection(course);
             sections.add(section);
         }
     }
 
-    /**
-     * Hilfsmethode, die für die übergebene Aufgaben-Kategorie eine neue Rubrik
-     * mit Kacheln im Dashboard erzeugt. Je Aufgabenstatus wird eine Kachel
-     * erzeugt. Zusätzlich eine Kachel für alle Aufgaben innerhalb der
-     * jeweiligen Kategorie.
-     *
-     * Ist die Kategorie null, bedeutet dass, dass eine Rubrik für alle Aufgaben
-     * aus allen Kategorien erzeugt werden soll.
-     *
-     * @param category Aufgaben-Kategorie, für die Kacheln erzeugt werden sollen
-     * @return Neue Dashboard-Rubrik mit den Kacheln
-     */
-    private DashboardSection createSection(Category category) {
+    private DashboardSection createSection(Course course) {
         // Neue Rubrik im Dashboard erzeugen
         DashboardSection section = new DashboardSection();
         String cssClass = "";
+        String status;
 
-        if (category != null) {
-            section.setLabel(category.getName());
+        if (course != null) {
+            section.setLabel(course.getName());
         } else {
             section.setLabel("Alle Kategorien");
             cssClass = "overview";
         }
 
         // Eine Kachel für alle Aufgaben in dieser Rubrik erzeugen
-        DashboardTile tile = this.createTile(category, null, "Alle", cssClass + " status-all", "calendar");
+        DashboardTile tile = this.createTile(course, "Alle", "Alle", cssClass + " status-all", "calendar");
         section.getTiles().add(tile);
 
         // Ja Aufgabenstatus eine weitere Kachel erzeugen
-        for (TaskStatus status : TaskStatus.values()) {
-            String cssClass1 = cssClass + " status-" + status.toString().toLowerCase();
+        for(int i = 0; i < 4; i++){
             String icon = "";
-
-            switch (status) {
-                case OPEN:
+            
+            switch (i) {
+                case 0:
                     icon = "doc-text";
+                    status = "today";
                     break;
-                case IN_PROGRESS:
+                case 1:
                     icon = "rocket";
+                    status = "before";
                     break;
-                case FINISHED:
+                case 2:
                     icon = "ok";
+                    status = "after";
                     break;
-                case CANCELED:
+                case 3:
                     icon = "cancel";
-                    break;
-                case POSTPONED:
-                    icon = "bell-off-empty";
+                    status = "deleted";
                     break;
             }
-
-            tile = this.createTile(category, status, status.getLabel(), cssClass1, icon);
+            
+            String cssClass1 = cssClass + " status-" + status.toLowerCase();
+            
+            tile = this.createTile(course, status, status, cssClass1, icon);
             section.getTiles().add(tile);
         }
 
@@ -125,16 +105,30 @@ public class DashboardContent implements DashboardContentProvider {
      * @param icon
      * @return
      */
-    private DashboardTile createTile(Category category, TaskStatus status, String label, String cssClass, String icon) {
-        int amount = taskBean.search(null, category, status).size();
+    private DashboardTile createTile(Course course, String status, String label, String cssClass, String icon) {
+        int amount = 0;
+        switch(status){
+            case "today":
+                amount = lectureBean.searchToday(course).size();
+                break;
+            case "before":
+                amount = lectureBean.searchBefore(course).size();
+                break;
+            case "after":
+                amount = lectureBean.searchAfter(course).size();
+                break;
+            case "deleted":
+                amount = lectureBean.searchDeleted(course).size();
+                break;
+        }
         String href = "/app/tasks/list/";
 
-        if (category != null) {
-            href = WebUtils.addQueryParameter(href, "search_category", "" + category.getId());
+        if (course != null) {
+            href = WebUtils.addQueryParameter(href, "search_course", "" + course.getId());
         }
 
         if (status != null) {
-            href = WebUtils.addQueryParameter(href, "search_status", status.toString());
+            href = WebUtils.addQueryParameter(href, "search_status", status);
         }
 
         DashboardTile tile = new DashboardTile();
