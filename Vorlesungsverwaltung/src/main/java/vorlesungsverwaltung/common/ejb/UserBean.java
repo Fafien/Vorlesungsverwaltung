@@ -65,7 +65,7 @@ public class UserBean extends EntityBean<User, String> {
      * @param newPassword
      * @throws UserBean.InvalidCredentialsException
      */
-    @RolesAllowed("app-user")
+    @RolesAllowed("vorlesungsverwaltung-user")
     public void changePassword(User user, String oldPassword, String newPassword) throws InvalidCredentialsException {
         if (user == null || !user.checkPassword(oldPassword)) {
             throw new InvalidCredentialsException("Benutzername oder Passwort sind falsch.");
