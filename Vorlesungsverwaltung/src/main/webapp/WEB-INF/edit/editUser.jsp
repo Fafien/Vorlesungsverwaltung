@@ -43,13 +43,13 @@
                         </div>
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-user-circle"></i></span>
+                                <span class="input-group-text"><i class="fa fa-address-book-o"></i></span>
                             </div>
                             <input type="text" class="form-control" name="firstname" value="${edit_form.values["firstname"][0]}" placeholder="Vorname" required="required">
                         </div>
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-user-circle"></i></span>
+                                <span class="input-group-text"><i class="fa fa-address-book-o"></i></span>
                             </div>
                             <input type="text" class="form-control" name="lastname" value="${edit_form.values["lastname"][0]}" placeholder="Nachname" required="required">
                         </div>
