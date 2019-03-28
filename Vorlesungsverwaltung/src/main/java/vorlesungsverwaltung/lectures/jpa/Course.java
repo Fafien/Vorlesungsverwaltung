@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -31,8 +32,8 @@ public class Course implements Serializable {
 
     private String courseName;
 
-    @ManyToOne
-    private List<User> user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private List<User> users;
 
     @OneToMany
     private List<Lecture> lectures;
@@ -64,12 +65,20 @@ public class Course implements Serializable {
         this.courseName = courseName;
     }
 
-    public List<User> getUser() {
-        return user;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setUser(List<User> user) {
-        this.user = user;
+    public void setUser(List<User> users) {
+        this.users = users;
+    }
+
+    public void addUser(User user) {
+        this.users.add(user);
+    }
+
+    public void removeUser(User user) {
+        this.users.remove(user);
     }
 
     public List<Lecture> getLectures() {
