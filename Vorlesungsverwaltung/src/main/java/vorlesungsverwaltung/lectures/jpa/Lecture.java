@@ -14,12 +14,12 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import vorlesungsverwaltung.course.jpa.Course;
 
 /**
  *
  * @author Fabian Hupe
  */
-
 @Entity
 @Table(name = "VORLESUNGSVERWALTUNG_LECTRUE")
 public class Lecture implements Serializable {
