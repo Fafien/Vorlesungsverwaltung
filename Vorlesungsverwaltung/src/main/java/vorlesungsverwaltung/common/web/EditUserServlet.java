@@ -85,9 +85,8 @@ public class EditUserServlet extends HttpServlet {
         User user = this.userBean.findById(username);
         List<String> errors = new ArrayList<>();
 
-        //TOOD: altes Passwort muss vor dem Vergleich gehashed werden
-        if (!oldPassword.equals(user.getPassword())) {
-            errors.add("Das alte Passwort stimmt nicht mit Ihrem aktuellen Passwort überein");
+        if (!user.checkPassword(oldPassword)) {
+            errors.add("Sie haben ein falsches Passwort eingegeben!");
         }
         if (newPassword != null && newPasswordConfirm != null && !newPassword.equals(newPasswordConfirm)) {
             errors.add("Die beiden Passwörter stimmen nicht überein.");

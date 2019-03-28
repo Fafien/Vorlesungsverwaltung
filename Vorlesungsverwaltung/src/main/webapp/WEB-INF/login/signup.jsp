@@ -43,23 +43,23 @@
                         <span class="required">*</span>
                     </label>
                     <div class="side-by-side">
-                        <input type="text" name="signup_username" value="${signup_form.values["signup_username"][0]}">
+                        <input type="text" name="signup_username" value="${signup_form.values["signup_username"][0]}" placeholder="Benutzername">
                     </div>
 
                     <label for="signup_firstname">
-                        Benutzername:
+                        Vorname:
                         <span class="required">*</span>
                     </label>
                     <div class="side-by-side">
-                        <input type="text" name="signup_firstname" value="${signup_form.values["signup_firstname"][0]}">
+                        <input type="text" name="signup_firstname" value="${signup_form.values["signup_firstname"][0]}" placeholder="Vorname">
                     </div>
 
                     <label for="signup_lastname">
-                        Benutzername:
+                        Nachname:
                         <span class="required">*</span>
                     </label>
                     <div class="side-by-side">
-                        <input type="text" name="signup_lastname" value="${signup_form.values["signup_lastname"][0]}">
+                        <input type="text" name="signup_lastname" value="${signup_form.values["signup_lastname"][0]}" placeholder="Nachname">
                     </div>
 
                     <label for="signup_password1">
