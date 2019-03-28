@@ -25,6 +25,10 @@
         <div class="menuitem">
             <a href="<c:url value="/app/tasks/categories/"/>">Kurs bearbeiten</a>
         </div>
+
+        <div class="menuitem">
+            <a href="<c:url value="/ajaxclient"/>">Kurs bearbeiten</a>
+        </div>
     </jsp:attribute>
 
     <jsp:attribute name="content">
