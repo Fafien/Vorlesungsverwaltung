@@ -39,8 +39,9 @@ public class DashboardServlet extends HttpServlet {
         List<DashboardSection> sections = new ArrayList<>();
         request.setAttribute("sections", sections);
         
-        lectureContent.createDashboardContent(sections);
-
+        //lectureContent.createDashboardContent(sections);
+        //Mal schauen ob wir das noch brauchen
+        
         // Anfrage an die JSP weiterleiten
         request.getRequestDispatcher("/WEB-INF/dashboard/dashboard.jsp").forward(request, response);
     }
