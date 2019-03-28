@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import vorlesungsverwaltung.lectures.ejb.CourseBean;
-import vorlesungsverwaltung.lectures.ejb.LectureBean;
 import vorlesungsverwaltung.lectures.jpa.Course;
 import vorlesungsverwaltung.lectures.jpa.Lecture;
 import vorlesungsverwaltung.lectures.ejb.LectureBean;
@@ -49,10 +48,10 @@ public class CourseListServlet extends HttpServlet {
             throws ServletException, IOException {
 
         // Alle vorhandenen Kategorien ermitteln
-        request.setAttribute("course", this.courseBean.findAll());
+        request.setAttribute("courses", this.courseBean.findAll());
 
         // Anfrage an dazugerhörige JSP weiterleiten
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/tasks/category_list.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/lectures/course_list.jsp");
         dispatcher.forward(request, response);
 
         // Alte Formulardaten aus der Session entfernen
@@ -73,23 +72,23 @@ public class CourseListServlet extends HttpServlet {
 
         switch (action) {
             case "create":
-                this.createCategory(request, response);
+                this.createCourse(request, response);
                 break;
             case "delete":
-                this.deleteCategories(request, response);
+                this.deleteCourse(request, response);
                 break;
         }
     }
 
     /**
-     * Aufgerufen in doPost(): Neue Kategorie anlegen
+     * Aufgerufen in doPost(): Neuen Kurs anlegen
      *
      * @param request
      * @param response
      * @throws ServletException
      * @throws IOException
      */
-    private void createCategory(HttpServletRequest request, HttpServletResponse response)
+    private void createCourse(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         // Formulareingaben prüfen
@@ -117,30 +116,28 @@ public class CourseListServlet extends HttpServlet {
     }
 
     /**
-     * Aufgerufen in doPost(): Markierte Kategorien löschen
+     * Aufgerufen in doPost(): Markierte Kurse und die dazugehörigen Vorlesungen
+     * löschen
      *
      * @param request
      * @param response
      * @throws ServletException
      * @throws IOException
      */
-    private void deleteCategories(HttpServletRequest request, HttpServletResponse response)
+    private void deleteCourse(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Markierte Kategorie IDs auslesen
-        String[] categoryIds = request.getParameterValues("category");
+        String[] courseIds = request.getParameterValues("course");
 
-        if (categoryIds == null) {
-            categoryIds = new String[0];
+        if (courseIds == null) {
+            courseIds = new String[0];
         }
 
-        // Kategorien löschen
-        for (String categoryId : categoryIds) {
-            // Zu löschende Kategorie ermitteln
+        for (String courseId : courseIds) {
             Course course;
 
             try {
-                course = this.courseBean.findById(Long.parseLong(categoryId));
+                course = this.courseBean.findById(Long.parseLong(courseId));
             } catch (NumberFormatException ex) {
                 continue;
             }
@@ -157,12 +154,8 @@ public class CourseListServlet extends HttpServlet {
                     this.lectureBean.delete(lecture);
                 });
             }
-
-            // Und weg damit
             this.courseBean.delete(course);
         }
-
-        // Browser auffordern, die Seite neuzuladen
         response.sendRedirect(request.getRequestURI());
     }
 

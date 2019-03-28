@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Copyright © 2018 Dennis Schulmeister-Zimolong
 
     E-Mail: dhbw@windows3.de
@@ -15,11 +15,11 @@
 
 <template:base>
     <jsp:attribute name="title">
-        Kategorien bearbeiten
+        Kurse bearbeiten
     </jsp:attribute>
 
     <jsp:attribute name="head">
-        <link rel="stylesheet" href="<c:url value="/css/category_list.css"/>" />
+        <link rel="stylesheet" href="<c:url value="/css/course_list.css"/>" />
     </jsp:attribute>
 
     <jsp:attribute name="menu">
@@ -28,7 +28,7 @@
         </div>
 
         <div class="menuitem">
-            <a href="<c:url value="/app/tasks/list/"/>">Liste</a>
+            <a href="<c:url value="/app/tasks/list/"/>">Liste der Vorlesungen</a>
         </div>
     </jsp:attribute>
 
@@ -39,18 +39,17 @@
 
             <%-- Feld zum Anlegen einer neuen Kategorie --%>
             <div class="column margin">
-                <label for="j_username">Neue Kategorie:</label>
-                <input type="text" name="name" value="${categories_form.values["name"][0]}">
-
+                <label for="j_username">Neuer Kurs:</label>
+                <input type="text" name="name" value="${course_form.values["name"][0]}">
                 <button type="submit" name="action" value="create" class="icon-pencil">
-                    Anlegen
+                    Kurs anlegen
                 </button>
             </div>
 
             <%-- Fehlermeldungen --%>
-            <c:if test="${!empty categories_form.errors}">
+            <c:if test="${!empty course_form.errors}">
                 <ul class="errors margin">
-                    <c:forEach items="${categories_form.errors}" var="error">
+                    <c:forEach items="${course_form.errors}" var="error">
                         <li>${error}</li>
                         </c:forEach>
                 </ul>
@@ -58,25 +57,25 @@
 
             <%-- Vorhandene Kategorien --%>
             <c:choose>
-                <c:when test="${empty categories}">
+                <c:when test="${empty courses}">
                     <p>
-                        Es sind noch keine Kategorien vorhanden. 🐏
+                        Es sind noch keine Kurse vorhanden.
                     </p>
                 </c:when>
                 <c:otherwise>
                     <div>
                         <div class="margin">
-                            <c:forEach items="${categories}" var="category">
-                                <input type="checkbox" name="category" id="${'category-'.concat(category.id)}" value="${category.id}" />
-                                <label for="${'category-'.concat(category.id)}">
-                                    <c:out value="${category.name}"/>
+                            <c:forEach items="${courses}" var="course">
+                                <input type="checkbox" name="course" id="${'course-'.concat(course.id)}" value="${course.id}" />
+                                <label for="${'course-'.concat(course.id)}">
+                                    <c:out value="${course.courseName}"/>
                                 </label>
                                 <br />
                             </c:forEach>
                         </div>
 
                         <button type="submit" name="action" value="delete" class="icon-trash">
-                            Markierte löschen
+                            Markierte Kurse löschen
                         </button>
                     </div>
                 </c:otherwise>
