@@ -49,9 +49,12 @@ public class EditUserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        //TODO: Alle Kurse abfragen und als Attribut setzen
+        HttpSession session = request.getSession();
+        session.setAttribute("courses", this.courseBean.findAll());
+        session.setAttribute("selectedCourse", this.userBean.getCurrentUser().getCourse());
 
         request.getRequestDispatcher(request.getContextPath() + "/WEB-INF/user/editUser.jsp");
+        session.removeAttribute("edit_form");
     }
 
     /**
