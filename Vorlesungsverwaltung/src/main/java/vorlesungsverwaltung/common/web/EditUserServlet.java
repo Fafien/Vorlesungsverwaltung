@@ -89,7 +89,7 @@ public class EditUserServlet extends HttpServlet {
         if (!user.checkPassword(oldPassword)) {
             errors.add("Sie haben ein falsches Passwort eingegeben!");
         }
-        if (newPassword != null && newPasswordConfirm != null) {
+        if (!newPassword.equals("") && !newPasswordConfirm.equals("")) {
             if (!newPassword.equals(newPasswordConfirm)) {
                 errors.add("Die beiden Passwörter stimmen nicht überein.");
             } else {

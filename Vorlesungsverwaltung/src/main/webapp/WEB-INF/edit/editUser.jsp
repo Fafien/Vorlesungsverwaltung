@@ -15,7 +15,9 @@
     </jsp:attribute>
 
     <jsp:attribute name="menu">
-
+        <div class="menuitem">
+            <a href="<c:url value="/app/dashboard/"/>">Zurück zum Dashboard</a>
+        </div>
     </jsp:attribute>
 
     <jsp:attribute name="content">
@@ -48,14 +50,14 @@
                     <span class="required">*</span>
                 </label>
                 <div class="side-by-side">
-                    <input type="text" name="firstname" value="${signup_form.values["firstname"][0]}" >
+                    <input type="text" name="firstname" value="${edit_form.values["firstname"][0]}" >
                 </div>
                 <label for="firstname">
                     Nachname:
                     <span class="required">*</span>
                 </label>
                 <div class="side-by-side">
-                    <input type="text" name="lastname" value="${signup_form.values["lastname"][0]}" >
+                    <input type="text" name="lastname" value="${edit_form.values["lastname"][0]}" >
                 </div>
                 <label for="coursename">
                     Kurs:
@@ -65,17 +67,18 @@
                         <!-- Leeres Auswahlfeld, damit der Kurs nicht immer zwingend geändert werden muss !-->
                         <option></option>
                         <c:forEach items="${courses}" var="course">
-                            <option value="${course.courseName}" ${course.courseName eq "${edit_form.values['currentCourseName'][0]}" ? ' selected' : ''}>${course.courseName}</option>
+                            <option value="${course.courseName}" ${course.courseName eq edit_form.values["currentCourseName"][0] ? ' selected' : ''}>${course.courseName}</option>
                         </c:forEach>
                     </select>
                 </div>
+                <small id="confirmHelp" class="form-text text-muted">Bitte geben Sie Ihr altes Passwort ein, um die Änderungen zu bestätigen!</small>
                 <label for="oldPassword">
                     Aktuelles Passwort:
                 </label>
                 <div class="side-by-side">
                     <input type="password" name="oldPassword">
-                    <small id="confirmHelp" class="form-text text-muted">Bitte geben Sie Ihr altes Passwort ein, um die Änderungen zu bestätigen!</small>
                 </div>
+                <br>
                 <%-- Button zum Abschicken --%>
                 <input class="btn btn-primary btn-block" type="submit" value="Benutzerdaten ändern">
             </form>
@@ -83,8 +86,10 @@
             <c:if test="${!empty edit_form.errors}">
                 <ul class="errors">
                     <c:forEach items="${edit_form.errors}" var="error">
-                        <li>${error}</li>
-                        </c:forEach>
+                        <li>
+                            ${error}
+                        </li>
+                    </c:forEach>
                 </ul>
             </c:if>
         </div>
