@@ -10,7 +10,6 @@
 package vorlesungsverwaltung.ajax_client.web;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,6 +34,6 @@ public class AjaxClientServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/ajax_client/client.html").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/ajax_client/client.jsp").forward(request, response);
     }
 }

@@ -23,11 +23,11 @@
         </div>
 
         <div class="menuitem">
-            <a href="<c:url value="/app/tasks/categories/"/>">Kurs bearbeiten</a>
+            <a href="<c:url value="/app/course/"/>">Kurse</a>
         </div>
 
         <div class="menuitem">
-            <a href="<c:url value="/ajaxclient"/>">Kurs bearbeiten</a>
+            <a href="<c:url value="/ajaxclient"/>">AJAX Client</a>
         </div>
     </jsp:attribute>
 

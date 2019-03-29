@@ -7,7 +7,6 @@
 <%@attribute name="head" fragment="true"%>
 <%@attribute name="menu" fragment="true"%>
 <%@attribute name="content" fragment="true"%>
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -28,6 +27,8 @@
         <jsp:invoke fragment="head"/>
     </head>
     <body>
+        <script type="text/javascript" src="<c:url value="/JavaScript/client.js"/>"></script>
+
         <%-- Kopfbereich --%>
         <header>
             <%-- Titelzeile --%>
@@ -53,8 +54,8 @@
         </header>
 
         <%-- Hauptinhalt der Seite --%>
-        <main>
-            <jsp:invoke fragment="content"/>
-        </main>
+        < main >
+        <jsp:invoke fragment="content"/>
+        < /main>
     </body>
 </html>
