@@ -19,11 +19,11 @@
         </div>
 
         <div class="menuitem">
-            <a href="<c:url value="/app/tasks/task/new/"/>">Vorlesung anlegen</a>
+            <a href="<c:url value="/app/lectures/lecture"/>">Vorlesung anlegen</a>
         </div>
 
         <div class="menuitem">
-            <a href="<c:url value="/app/tasks/categories/"/>">Kurs bearbeiten</a>
+            <a href="<c:url value="/app/course/"/>">Kurs bearbeiten</a>
         </div>
 
         <div class="menuitem">
