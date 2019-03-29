@@ -27,18 +27,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import vorlesungsverwaltung.lectures.ejb.CourseBean;
+import vorlesungsverwaltung.lectures.ejb.LectureBean;
+import vorlesungsverwaltung.lectures.jpa.Appointment;
+import vorlesungsverwaltung.lectures.jpa.Lecture;
 
 /**
  * Seite zum Anlegen oder Bearbeiten einer Aufgabe.
  */
-@WebServlet(urlPatterns = "/app/tasks/task/*")
-public class TaskEditServlet extends HttpServlet {
-/*
-    @EJB
-    TaskBean taskBean;
+@WebServlet(urlPatterns = "/app/lectures/lecture/*")
+public class LectureEditServlet extends HttpServlet {
 
     @EJB
-    CategoryBean categoryBean;
+    LectureBean lecturebean;
+
+    @EJB
+    CourseBean coursebean;
 
     @EJB
     UserBean userBean;
@@ -50,26 +54,24 @@ public class TaskEditServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Verfügbare Kategorien und Stati für die Suchfelder ermitteln
-        request.setAttribute("categories", this.categoryBean.findAllSorted());
-        request.setAttribute("statuses", TaskStatus.values());
-
-        // Zu bearbeitende Aufgabe einlesen
         HttpSession session = request.getSession();
+        
+        // Verfügbare Kategorien und Stati für die Suchfelder ermitteln
+        request.setAttribute("courses", this.coursebean.findAllSorted());
 
-        Task task = this.getRequestedTask(request);
-        request.setAttribute("edit", task.getId() != 0);
+        Lecture lecture = this.getRequestedLecture(request);
+        request.setAttribute("edit", lecture.getId() != 0);
                                 
-        if (session.getAttribute("task_form") == null) {
+        if (session.getAttribute("lecture_form") == null) {
             // Keine Formulardaten mit fehlerhaften Daten in der Session,
             // daher Formulardaten aus dem Datenbankobjekt übernehmen
-            request.setAttribute("task_form", this.createTaskForm(task));
+            request.setAttribute("lecture_form", this.createLectureForm(lecture));
         }
 
-        // Anfrage an die JSP weiterleiten
-        request.getRequestDispatcher("/WEB-INF/tasks/task_edit.jsp").forward(request, response);
+        // Weiterleitung an die JSP
+        request.getRequestDispatcher("/WEB-INF/lectures/lecture_edit.jsp").forward(request, response);
         
-        session.removeAttribute("task_form");
+        session.removeAttribute("lecture_form");
     }
 
     @Override
@@ -85,14 +87,14 @@ public class TaskEditServlet extends HttpServlet {
 
         switch (action) {
             case "save":
-                this.saveTask(request, response);
+                this.saveLecture(request, response);
                 break;
             case "delete":
-                this.deleteTask(request, response);
+                this.deleteLecture(request, response);
                 break;
         }
     }
-*/
+
     /**
      * Aufgerufen in doPost(): Neue oder vorhandene Aufgabe speichern
      *
@@ -100,65 +102,60 @@ public class TaskEditServlet extends HttpServlet {
      * @param response
      * @throws ServletException
      * @throws IOException
-     *//*
-    private void saveTask(HttpServletRequest request, HttpServletResponse response)
+     */
+    private void saveLecture(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         // Formulareingaben prüfen
         List<String> errors = new ArrayList<>();
 
-        String taskCategory = request.getParameter("task_category");
-        String taskDueDate = request.getParameter("task_due_date");
-        String taskDueTime = request.getParameter("task_due_time");
-        String taskStatus = request.getParameter("task_status");
-        String taskShortText = request.getParameter("task_short_text");
-        String taskLongText = request.getParameter("task_long_text");
+        String lectureCourse = request.getParameter("lecture_course");
+        String lectureDueDate = request.getParameter("lecture_due_date");
+        String lectureDueTime = request.getParameter("lecture_due_time");
+        String lectureName = request.getParameter("lecture_lectureName");
 
-        Task task = this.getRequestedTask(request);
+        Lecture lecture = this.getRequestedLecture(request);
 
-        if (taskCategory != null && !taskCategory.trim().isEmpty()) {
+        if (lectureCourse != null && !lectureCourse.trim().isEmpty()) {
             try {
-                task.setCategory(this.categoryBean.findById(Long.parseLong(taskCategory)));
+                lecture.setCourse(this.coursebean.findById(Long.parseLong(lectureCourse)));
             } catch (NumberFormatException ex) {
                 // Ungültige oder keine ID mitgegeben
             }
         }
 
-        Date dueDate = WebUtils.parseDate(taskDueDate);
-        Time dueTime = WebUtils.parseTime(taskDueTime);
+        Date dueDate = WebUtils.parseDate(lectureDueDate);
+        Time dueTime = WebUtils.parseTime(lectureDueTime);
 
+        Appointment appointment = new Appointment();
+        
         if (dueDate != null) {
-            task.setDueDate(dueDate);
+            appointment.setLecture(lecture);
+            appointment.setDate(dueDate);
         } else {
             errors.add("Das Datum muss dem Format dd.mm.yyyy entsprechen.");
         }
 
         if (dueTime != null) {
-            task.setDueTime(dueTime);
+            appointment.setLecture(lecture);
+            appointment.setTime(dueTime);
         } else {
             errors.add("Die Uhrzeit muss dem Format hh:mm:ss entsprechen.");
         }
 
-        try {
-            task.setStatus(TaskStatus.valueOf(taskStatus));
-        } catch (IllegalArgumentException ex) {
-            errors.add("Der ausgewählte Status ist nicht vorhanden.");
-        }
-
-        task.setShortText(taskShortText);
-        task.setLongText(taskLongText);
-
-        this.validationBean.validate(task, errors);
+        lecture.setLectureName(lectureName);
+        
+        this.validationBean.validate(lecture, errors);
 
         // Datensatz speichern
         if (errors.isEmpty()) {
-            this.taskBean.update(task);
+            this.lecturebean.update(lecture);
         }
 
         // Weiter zur nächsten Seite
         if (errors.isEmpty()) {
             // Keine Fehler: Startseite aufrufen
-            response.sendRedirect(WebUtils.appUrl(request, "/app/tasks/list/"));
+            response.sendRedirect(WebUtils.appUrl(request, "/app/lectures/list/"));
         } else {
             // Fehler: Formuler erneut anzeigen
             FormValues formValues = new FormValues();
@@ -166,12 +163,12 @@ public class TaskEditServlet extends HttpServlet {
             formValues.setErrors(errors);
 
             HttpSession session = request.getSession();
-            session.setAttribute("task_form", formValues);
+            session.setAttribute("lecture_form", formValues);
 
             response.sendRedirect(request.getRequestURI());
         }
     }
-*/
+
     /**
      * Aufgerufen in doPost: Vorhandene Aufgabe löschen
      *
@@ -179,16 +176,16 @@ public class TaskEditServlet extends HttpServlet {
      * @param response
      * @throws ServletException
      * @throws IOException
-     *//*
-    private void deleteTask(HttpServletRequest request, HttpServletResponse response)
+     */
+    private void deleteLecture(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         // Datensatz löschen
-        Task task = this.getRequestedTask(request);
-        this.taskBean.delete(task);
+        Lecture lecture = this.getRequestedLecture(request);
+        this.lecturebean.delete(lecture);
 
         // Zurück zur Übersicht
-        response.sendRedirect(WebUtils.appUrl(request, "/app/tasks/list/"));
+        response.sendRedirect(WebUtils.appUrl(request, "/app/lectures/list/"));
     }
 
     /**
@@ -198,35 +195,36 @@ public class TaskEditServlet extends HttpServlet {
      *
      * @param request HTTP-Anfrage
      * @return Zu bearbeitende Aufgabe
-     *//*
-    private Task getRequestedTask(HttpServletRequest request) {
+     */
+    private Lecture getRequestedLecture(HttpServletRequest request) {
         // Zunächst davon ausgehen, dass ein neuer Satz angelegt werden soll
-        Task task = new Task();
-        task.setOwner(this.userBean.getCurrentUser());
-        task.setDueDate(new Date(System.currentTimeMillis()));
-        task.setDueTime(new Time(System.currentTimeMillis()));
+        Lecture lecture = new Lecture();
+        Appointment appointment = new Appointment();
+        appointment.setLecture(lecture);
+        appointment.setDate(new Date(System.currentTimeMillis()));
+        appointment.setTime(new Time(System.currentTimeMillis()));
 
         // ID aus der URL herausschneiden
-        String taskId = request.getPathInfo();
+        String lectureId = request.getPathInfo();
 
-        if (taskId == null) {
-            taskId = "";
+        if (lectureId == null) {
+            lectureId = "";
         }
 
-        taskId = taskId.substring(1);
+        lectureId = lectureId.substring(1);
 
-        if (taskId.endsWith("/")) {
-            taskId = taskId.substring(0, taskId.length() - 1);
+        if (lectureId.endsWith("/")) {
+            lectureId = lectureId.substring(0, lectureId.length() - 1);
         }
 
         // Versuchen, den Datensatz mit der übergebenen ID zu finden
         try {
-            task = this.taskBean.findById(Long.parseLong(taskId));
+            lecture = this.lecturebean.findById(Long.parseLong(lectureId));
         } catch (NumberFormatException ex) {
             // Ungültige oder keine ID in der URL enthalten
         }
 
-        return task;
+        return lecture;
     }
 
     /**
@@ -236,45 +234,33 @@ public class TaskEditServlet extends HttpServlet {
      * Formular aus der Entity oder aus einer vorherigen Formulareingabe
      * stammen.
      *
-     * @param task Die zu bearbeitende Aufgabe
+     * @param lecture Die zu bearbeitende Aufgabe
      * @return Neues, gefülltes FormValues-Objekt
-     *//*
-    private FormValues createTaskForm(Task task) {
+     */
+    private FormValues createLectureForm(Lecture lecture) {
         Map<String, String[]> values = new HashMap<>();
 
-        values.put("task_owner", new String[]{
-            task.getOwner().getUsername()
-        });
-
-        if (task.getCategory() != null) {
-            values.put("task_category", new String[]{
-                "" + task.getCategory().getId()
+        if (lecture.getCourse() != null) {
+            values.put("lecture_course", new String[]{
+                "" + lecture.getCourse().getId()
             });
         }
 
-        values.put("task_due_date", new String[]{
-            WebUtils.formatDate(task.getDueDate())
+        values.put("lecture_due_date", new String[]{
+//            WebUtils.formatDate(lecture.getDate())
         });
 
-        values.put("task_due_time", new String[]{
-            WebUtils.formatTime(task.getDueTime())
+        values.put("lecture_due_time", new String[]{
+//            WebUtils.formatTime(lecture.getDueTime())
         });
 
-        values.put("task_status", new String[]{
-            task.getStatus().toString()
-        });
-
-        values.put("task_short_text", new String[]{
-            task.getShortText()
-        });
-
-        values.put("task_long_text", new String[]{
-            task.getLongText()
+        values.put("lecture_short_text", new String[]{
+            lecture.getLectureName()
         });
 
         FormValues formValues = new FormValues();
         formValues.setValues(values);
         return formValues;
     }
-*/
 }
+

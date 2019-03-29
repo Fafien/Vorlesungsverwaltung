@@ -9,6 +9,7 @@
  */
 package vorlesungsverwaltung.lectures.ejb;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import vorlesungsverwaltung.common.ejb.EntityBean;
 import vorlesungsverwaltung.lectures.jpa.Course;
@@ -30,5 +31,9 @@ public class CourseBean extends EntityBean<Course, Long> {
         return (Course) this.em.createQuery("SELECT c FROM Course c WHERE c.courseName = :courseName")
                 .setParameter("courseName", courseName)
                 .getSingleResult();
+    }
+    
+    public List<Course> findAllSorted() {
+        return this.em.createQuery("SELECT c FROM Course c ORDER BY c.courseName").getResultList();
     }
 }
