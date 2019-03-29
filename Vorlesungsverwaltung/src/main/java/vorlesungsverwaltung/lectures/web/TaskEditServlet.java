@@ -67,7 +67,7 @@ public class TaskEditServlet extends HttpServlet {
         }
 
         // Anfrage an die JSP weiterleiten
-        request.getRequestDispatcher("/WEB-INF/tasks/task_edit.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/lectures/lecture_edit.jsp").forward(request, response);
         
         session.removeAttribute("task_form");
     }
