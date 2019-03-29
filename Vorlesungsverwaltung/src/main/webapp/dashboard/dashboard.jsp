@@ -19,15 +19,15 @@
         </div>
 
         <div class="menuitem">
-            <a href="<c:url value="/app/lectures/lecture"/>">Vorlesung anlegen</a>
+            <a href="<c:url value="/app/tasks/task/new/"/>">Vorlesung anlegen</a>
         </div>
 
         <div class="menuitem">
-            <a href="<c:url value="/app/course/"/>">Kurs bearbeiten</a>
+            <a href="<c:url value="/app/tasks/categories/"/>">Kurs bearbeiten</a>
         </div>
 
         <div class="menuitem">
-            <a href="<c:url value="/ajaxclient"/>">AJAX Client</a>
+            <a href="<c:url value="/ajaxclient"/>">Kurs bearbeiten</a>
         </div>
     </jsp:attribute>
 

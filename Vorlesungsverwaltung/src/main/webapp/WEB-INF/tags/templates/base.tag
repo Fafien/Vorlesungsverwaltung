@@ -7,23 +7,28 @@
 <%@attribute name="head" fragment="true"%>
 <%@attribute name="menu" fragment="true"%>
 <%@attribute name="content" fragment="true"%>
-
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8" />
 
         <title>Vorlesungsliste: ${title}</title>
-        
+
         <link rel="shortcut icon" href="<c:url value="/img/favicon.png"/>">
 
         <link rel="stylesheet" href="<c:url value="/fontello/css/fontello.css"/>" />
         <link rel="stylesheet" href="<c:url value="/css/main.css"/>" />
         <link rel="stylesheet" href="<c:url value="/css/form.css"/>" />
+        <link rel="stylesheet" type="text/css" href="<c:url value="/css/bootstrap/bootstrap-reboot.min.css"/>" >
+        <link rel="stylesheet" type="text/css" href="<c:url value="/css/bootstrap/bootstrap-grid.min.css"/>" >
+        <link rel="stylesheet" type="text/css" href="<c:url value="/css/bootstrap/bootstrap.min.css"/>" >
+        <link rel="stylesheet" type="text/css" href="<c:url value="/css/fontawesome/css/all.min.css"/>">
 
         <jsp:invoke fragment="head"/>
     </head>
     <body>
+        <script type="text/javascript" src="<c:url value="/JavaScript/client.js"/>"></script>
+
         <%-- Kopfbereich --%>
         <header>
             <%-- Titelzeile --%>
@@ -49,8 +54,8 @@
         </header>
 
         <%-- Hauptinhalt der Seite --%>
-        <main>    
-            <jsp:invoke fragment="content"/>
-        </main>
+        < main >
+        <jsp:invoke fragment="content"/>
+        < /main>
     </body>
 </html>
