@@ -73,8 +73,8 @@ public class EditUserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         request.setCharacterEncoding("UTF-8");
-        //TODO: Keine Auswahl beim Kurs abfangen
         String username = request.getParameter("username");
         String newPassword = request.getParameter("newPassword");
         String newPasswordConfirm = request.getParameter("newPasswordConfirm");
@@ -82,7 +82,6 @@ public class EditUserServlet extends HttpServlet {
         String firstName = request.getParameter("firstname");
         String lastName = request.getParameter("lastname");
         String courseName = request.getParameter("coursename");
-        Course course = this.courseBean.findByCourseName(courseName);
 
         User user = this.userBean.findById(username);
         List<String> errors = new ArrayList<>();
@@ -90,15 +89,20 @@ public class EditUserServlet extends HttpServlet {
         if (!user.checkPassword(oldPassword)) {
             errors.add("Sie haben ein falsches Passwort eingegeben!");
         }
-        //TODO: Passwort muss nicht geändert werden --> leerer String oder null prüfen
-        if (newPassword != null && newPasswordConfirm != null && !newPassword.equals(newPasswordConfirm)) {
-            errors.add("Die beiden Passwörter stimmen nicht überein.");
+        if (newPassword != null && newPasswordConfirm != null) {
+            if (!newPassword.equals(newPasswordConfirm)) {
+                errors.add("Die beiden Passwörter stimmen nicht überein.");
+            } else {
+                user.setPassword(newPassword);
+            }
+        }
+        if (courseName != null && !courseName.trim().equals("")) {
+            Course course = this.courseBean.findByCourseName(courseName);
+            user.setCourse(course);
         }
 
-        user.setPassword(newPasswordConfirm);
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        user.setCourse(course);
         errors = validationBean.validate(user, errors);
 
         if (errors.isEmpty()) {

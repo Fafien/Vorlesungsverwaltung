@@ -23,6 +23,10 @@
         </div>
 
         <div class="menuitem">
+            <a href="<c:url value="/app/user/edit/"/>">Benutzerdaten ändern</a>
+        </div>
+
+        <div class="menuitem">
             <a href="<c:url value="/app/course/"/>">Kurse</a>
         </div>
 
