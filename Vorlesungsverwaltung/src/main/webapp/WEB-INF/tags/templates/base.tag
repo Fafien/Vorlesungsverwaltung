@@ -14,12 +14,16 @@
         <meta charset="utf-8" />
 
         <title>Vorlesungsliste: ${title}</title>
-        
+
         <link rel="shortcut icon" href="<c:url value="/img/favicon.png"/>">
 
         <link rel="stylesheet" href="<c:url value="/fontello/css/fontello.css"/>" />
         <link rel="stylesheet" href="<c:url value="/css/main.css"/>" />
         <link rel="stylesheet" href="<c:url value="/css/form.css"/>" />
+        <link rel="stylesheet" type="text/css" href="<c:url value="/css/bootstrap/bootstrap-reboot.min.css"/>" >
+        <link rel="stylesheet" type="text/css" href="<c:url value="/css/bootstrap/bootstrap-grid.min.css"/>" >
+        <link rel="stylesheet" type="text/css" href="<c:url value="/css/bootstrap/bootstrap.min.css"/>" >
+        <link rel="stylesheet" type="text/css" href="<c:url value="/css/fontawesome/css/all.min.css"/>">
 
         <jsp:invoke fragment="head"/>
     </head>
@@ -49,7 +53,7 @@
         </header>
 
         <%-- Hauptinhalt der Seite --%>
-        <main>    
+        <main>
             <jsp:invoke fragment="content"/>
         </main>
     </body>
