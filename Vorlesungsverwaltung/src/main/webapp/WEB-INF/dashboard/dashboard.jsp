@@ -23,7 +23,7 @@
         </div>
 
         <div class="menuitem">
-            <a href="<c:url value="/app/course/"/>">Kurs bearbeiten</a>
+            <a href="<c:url value="/app/course/"/>">Kurse</a>
         </div>
 
         <div class="menuitem">
