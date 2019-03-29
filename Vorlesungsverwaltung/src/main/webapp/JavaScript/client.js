@@ -26,11 +26,9 @@ let search = document.getElementById("search");
         // Abgerufene Daten anzeigen
         lectures.forEach(series => {
         //TODO: Pro Eigenschaft Zeile nach Pattern erstellen
-        let html = "
-                <div>
-    <b>Name der Eigenschaft:</b> ${lecture.eigenschaft} <br/>
-</div>
-                ";
+        let html = "<div>\n\
+<b>Name der Eigenschaft:</b> ${lecture.eigenschaft} <br/>\n\
+</div>";
                 resultDiv.innerHTML += html;
         });
         }

@@ -23,12 +23,12 @@
         <link rel="stylesheet" type="text/css" href="<c:url value="/css/bootstrap/bootstrap-grid.min.css"/>" >
         <link rel="stylesheet" type="text/css" href="<c:url value="/css/bootstrap/bootstrap.min.css"/>" >
         <link rel="stylesheet" type="text/css" href="<c:url value="/css/fontawesome/css/all.min.css"/>">
+        
+        <script type="text/javascript" src="<c:url value="/JavaScript/client.js"/>"></script>
 
         <jsp:invoke fragment="head"/>
     </head>
     <body>
-        <script type="text/javascript" src="<c:url value="/JavaScript/client.js"/>"></script>
-
         <%-- Kopfbereich --%>
         <header>
             <%-- Titelzeile --%>
@@ -54,8 +54,8 @@
         </header>
 
         <%-- Hauptinhalt der Seite --%>
-        < main >
-        <jsp:invoke fragment="content"/>
-        < /main>
+        <main>
+            <jsp:invoke fragment="content"/>
+        </main>
     </body>
 </html>
