@@ -35,7 +35,6 @@ public class AjaxClientServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect("WEB-INF/ajax_client/client.html");
-        return;
+        request.getRequestDispatcher("/WEB-INF/ajax_client/client.html").forward(request, response);
     }
 }

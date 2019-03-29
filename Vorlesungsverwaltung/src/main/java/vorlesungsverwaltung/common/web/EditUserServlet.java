@@ -52,11 +52,9 @@ public class EditUserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        //TODO: Design der Seite, bootstrap in base.tag hinzufügen
         request.setCharacterEncoding("UTF-8");
         User currentUser = this.userBean.getCurrentUser();
         HttpSession session = request.getSession();
-        //TODO: Prüfen, wenn kein Kurs vorhanden + was tun, wenn kein Kurs existiert?
         session.setAttribute("courses", this.courseBean.findAll());
         FormValues form = this.getFormValuesForCurrentUser(currentUser);
         session.setAttribute("edit_form", form);
@@ -76,7 +74,7 @@ public class EditUserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-
+        //TODO: Keine Auswahl beim Kurs abfangen
         String username = request.getParameter("username");
         String newPassword = request.getParameter("newPassword");
         String newPasswordConfirm = request.getParameter("newPasswordConfirm");
