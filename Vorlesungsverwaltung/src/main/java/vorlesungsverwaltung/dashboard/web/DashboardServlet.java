@@ -1,9 +1,9 @@
 /*
  * Copyright © 2019 Dennis Schulmeister-Zimolong
- * 
+ *
  * E-Mail: dhbw@windows3.de
  * Webseite: https://www.wpvs.de/
- * 
+ *
  * Dieser Quellcode ist lizenziert unter einer
  * Creative Commons Namensnennung 4.0 International Lizenz.
  */
@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 public class DashboardServlet extends HttpServlet {
 
     // Kacheln für Aufgaben
-    @EJB(beanName = "tasks")
+    @EJB(beanName = "lectures")
     DashboardContentProvider lectureContent;
 
     @Override
@@ -38,10 +38,10 @@ public class DashboardServlet extends HttpServlet {
         // Dashboard-Rubriken und Kacheln erzeugen und im Request Context ablegen
         List<DashboardSection> sections = new ArrayList<>();
         request.setAttribute("sections", sections);
-        
-        //lectureContent.createDashboardContent(sections);
+
+        lectureContent.createDashboardContent(sections);
         //Mal schauen ob wir das noch brauchen
-        
+
         // Anfrage an die JSP weiterleiten
         request.getRequestDispatcher("/WEB-INF/dashboard/dashboard.jsp").forward(request, response);
     }
