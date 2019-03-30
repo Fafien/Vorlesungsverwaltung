@@ -253,15 +253,21 @@ public class LectureEditServlet extends HttpServlet {
             });
         }
         
-//es können mehrere Termine pro Vorlesung sein!
-        values.put("lecture_due_date", new String[]{
-//            WebUtils.formatDate(lecture.getAppointment().date)
-        });
+        List<Appointment> appointments = lecture.getAppointment();
+        
+        if(appointments != null) {
+            String[] dates = null;
+            String[] times = null;
+            
+            for(int i = 0; i < appointments.size(); i++) {
+                dates[i] = WebUtils.formatDate(new Date(appointments.get(i).getDate().getTime()));
+                times[i] = WebUtils.formatTime(appointments.get(i).getTime());
+            }
+            values.put("lecture_due_date", dates);
 
-        values.put("lecture_due_time", new String[]{
-//            WebUtils.formatTime(lecture.getDueTime())
-        });
-
+            values.put("lecture_due_time", times);
+        }
+        
         values.put("lecture_short_text", new String[]{
             lecture.getLectureName()
         });

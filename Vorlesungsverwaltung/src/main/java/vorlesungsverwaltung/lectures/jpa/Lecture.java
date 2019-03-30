@@ -44,7 +44,7 @@ public class Lecture implements Serializable {
     @Size(min = 1, max = 25, message = "Die Bezeichnung muss zwischen ein und 25 Zeichen lang sein.")
     private String lecturer;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="lecture", cascade = CascadeType.MERGE)
     private List<Appointment> appointment;
     
     private boolean deleted;

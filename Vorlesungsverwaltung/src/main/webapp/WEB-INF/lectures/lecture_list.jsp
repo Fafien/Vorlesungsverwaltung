@@ -88,11 +88,11 @@
                             <td>
                                 <c:out value="${lecture.lecturer}"/>
                             </td>
-                            <%-- es können mehrere Termine pro Vorlesung sein --%>
+                            <%-- es können mehrere Termine pro Vorlesung sein 
                             <td>
                                 <c:out value="${utils.formatDate(lecture.appointment.date)}"/>
                                 <c:out value="${utils.formatTime(lecture.appointment.time)}"/>
-                            </td>
+                            </td>--%>
                         </tr>
                     </c:forEach>
                 </table>
