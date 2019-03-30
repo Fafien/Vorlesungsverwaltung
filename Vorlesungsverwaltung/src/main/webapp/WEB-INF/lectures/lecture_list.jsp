@@ -60,11 +60,11 @@
         <c:choose>
             <c:when test="${empty lectures}">
                 <p>
-                    Es wurden keine Aufgaben gefunden. 🐈
+                    Es wurden keine Vorlesungen gefunden. 🐈
                 </p>
             </c:when>
             <c:otherwise>
-                <jsp:useBean id="utils" class="dhbwka.wwi.vertsys.javaee.jtodo.common.web.WebUtils"/>
+                <jsp:useBean id="utils" class="vorlesungsverwaltung.common.web.WebUtils"/>
                 
                 <table>
                     <thead>
@@ -75,7 +75,7 @@
                             <th>Termin</th>
                         </tr>
                     </thead>
-                    <c:forEach items="${lectures}" var="task">
+                    <c:forEach items="${lectures}" var="lecture">
                         <tr>
                             <td>
                                 <a href="<c:url value="/app/lectures/lecture/${lecture.id}/"/>">
@@ -88,6 +88,7 @@
                             <td>
                                 <c:out value="${lecture.lecturer}"/>
                             </td>
+                            <%-- es können mehrere Termine pro Vorlesung sein --%>
                             <td>
                                 <c:out value="${utils.formatDate(lecture.appointment.date)}"/>
                                 <c:out value="${utils.formatTime(lecture.appointment.time)}"/>

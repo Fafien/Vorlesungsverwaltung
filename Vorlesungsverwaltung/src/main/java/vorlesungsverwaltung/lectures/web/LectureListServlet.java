@@ -55,9 +55,9 @@ public class LectureListServlet extends HttpServlet {
                 course = null;
             }
         }
-
-        List<Lecture> lecture = this.lectureBean.searchByTextAndCourse(searchText, course);
-        request.setAttribute("lectures", lecture);
+        
+        List<Lecture> lectures = this.lectureBean.searchByTextAndCourse(searchText, course);
+        request.setAttribute("lectures", lectures);
 
         // Anfrage an die JSP weiterleiten
         request.getRequestDispatcher("/WEB-INF/lectures/lecture_list.jsp").forward(request, response);

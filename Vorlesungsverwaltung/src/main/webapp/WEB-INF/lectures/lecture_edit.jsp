@@ -46,34 +46,42 @@
                 <input type="hidden" name="csrf_token" value="${csrf_token}">
 
                 <%-- Eingabefelder --%>
-                <label for="task_category">Kurs</label>
+                <label for="lecture_course">Kurs</label>
                 <div class="side-by-side">
-                    <select name="task_category">
+                    <select name="lecture_course">
                         <%-- <option value="">Keine Kategorie</option> --%>
 
-                        <c:forEach items="${categories}" var="category">
-                            <option value="${category.id}" ${task_form.values["task_category"][0] == category.id.toString() ? 'selected' : ''}>
-                                <c:out value="${category.name}" />
+                        <c:forEach items="${courses}" var="course">
+                            <option value="${course.id}" ${lecture_form.values["lecture_course"][0] == course.id.toString() ? 'selected' : ''}>
+                                <c:out value="${course.courseName}" />
                             </option>
                         </c:forEach>
                     </select>
                 </div>
 
-                <label for="task_due_date">
-                    Termin:
-                    <span class="required">*</span>
-                </label>
-                <div class="side-by-side">
-                    <input type="text" name="task_due_date" value="${task_form.values["task_due_date"][0]}">
-                    <input type="text" name="task_due_time" value="${task_form.values["task_due_time"][0]}">
-                </div>
-                
-                <label for="task_short_text">
+                <label for="lecture_short_text">
                     Vorlesungsname:
                     <span class="required">*</span>
                 </label>
                 <div class="side-by-side">
-                    <input type="text" name="task_short_text" value="${task_form.values["task_short_text"][0]}">
+                    <input type="text" name="lecture_short_text" value="${lecture_form.values["lecture_short_text"][0]}">
+                </div>
+                
+                <label for="lecture_lecturer">
+                    Dozent/-in:
+                    <span class="required">*</span>
+                </label>
+                <div class="side-by-side">
+                    <input type="text" name="lecture_lecturer" value="${lecture_form.values["lecture_lecturer"][0]}">
+                </div>
+                
+                <label for="lecture_due_date">
+                    Termin:
+                    <span class="required">*</span>
+                </label>
+                <div class="side-by-side">
+                    <input type="text" name="lecture_due_date" value="${lecture_form.values["lecture_due_date"][0]}">
+                    <input type="text" name="lecture_due_time" value="${lecture_form.values["lecture_due_time"][0]}">
                 </div>
 
                 <%-- Button zum Abschicken --%>
@@ -91,9 +99,9 @@
             </div>
 
             <%-- Fehlermeldungen --%>
-            <c:if test="${!empty task_form.errors}">
+            <c:if test="${!empty lecture_form.errors}">
                 <ul class="errors">
-                    <c:forEach items="${task_form.errors}" var="error">
+                    <c:forEach items="${lecture_form.errors}" var="error">
                         <li>${error}</li>
                     </c:forEach>
                 </ul>

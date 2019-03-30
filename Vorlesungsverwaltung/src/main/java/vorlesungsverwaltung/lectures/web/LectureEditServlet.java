@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import vorlesungsverwaltung.lectures.ejb.AppointmentBean;
 import vorlesungsverwaltung.lectures.ejb.CourseBean;
 import vorlesungsverwaltung.lectures.ejb.LectureBean;
 import vorlesungsverwaltung.lectures.jpa.Appointment;
@@ -43,6 +44,9 @@ public class LectureEditServlet extends HttpServlet {
 
     @EJB
     CourseBean coursebean;
+    
+    @EJB
+    AppointmentBean appointmentbean;
 
     @EJB
     UserBean userBean;
@@ -112,7 +116,8 @@ public class LectureEditServlet extends HttpServlet {
         String lectureCourse = request.getParameter("lecture_course");
         String lectureDueDate = request.getParameter("lecture_due_date");
         String lectureDueTime = request.getParameter("lecture_due_time");
-        String lectureName = request.getParameter("lecture_lectureName");
+        String lectureName = request.getParameter("lecture_short_text");
+        String lecturer = request.getParameter("lecture_lecturer");
 
         Lecture lecture = this.getRequestedLecture(request);
 
@@ -127,23 +132,25 @@ public class LectureEditServlet extends HttpServlet {
         Date dueDate = WebUtils.parseDate(lectureDueDate);
         Time dueTime = WebUtils.parseTime(lectureDueTime);
 
+        List<Appointment> appointments = new ArrayList<Appointment>();
         Appointment appointment = new Appointment();
         
         if (dueDate != null) {
-            appointment.setLecture(lecture);
             appointment.setDate(dueDate);
         } else {
             errors.add("Das Datum muss dem Format dd.mm.yyyy entsprechen.");
         }
 
         if (dueTime != null) {
-            appointment.setLecture(lecture);
             appointment.setTime(dueTime);
         } else {
             errors.add("Die Uhrzeit muss dem Format hh:mm:ss entsprechen.");
         }
-
+        
+        appointments.add(appointment);
         lecture.setLectureName(lectureName);
+        lecture.setLecturer(lecturer);
+        lecture.setAppointment(appointments);
         
         this.validationBean.validate(lecture, errors);
 
@@ -209,9 +216,9 @@ public class LectureEditServlet extends HttpServlet {
 
         if (lectureId == null) {
             lectureId = "";
+        } else {
+            lectureId = lectureId.substring(1);
         }
-
-        lectureId = lectureId.substring(1);
 
         if (lectureId.endsWith("/")) {
             lectureId = lectureId.substring(0, lectureId.length() - 1);
@@ -245,9 +252,10 @@ public class LectureEditServlet extends HttpServlet {
                 "" + lecture.getCourse().getId()
             });
         }
-
+        
+//es können mehrere Termine pro Vorlesung sein!
         values.put("lecture_due_date", new String[]{
-//            WebUtils.formatDate(lecture.getDate())
+//            WebUtils.formatDate(lecture.getAppointment().date)
         });
 
         values.put("lecture_due_time", new String[]{
@@ -256,6 +264,10 @@ public class LectureEditServlet extends HttpServlet {
 
         values.put("lecture_short_text", new String[]{
             lecture.getLectureName()
+        });
+        
+        values.put("lecture_lecturer", new String[]{
+            lecture.getLecturer()
         });
 
         FormValues formValues = new FormValues();

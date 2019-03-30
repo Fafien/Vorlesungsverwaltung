@@ -14,6 +14,10 @@ import vorlesungsverwaltung.common.ejb.EntityBean;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import vorlesungsverwaltung.lectures.jpa.Lecture;
 import vorlesungsverwaltung.lectures.jpa.Course;
 
@@ -90,18 +94,33 @@ public class LectureBean extends EntityBean<Lecture, Long> {
 
     public List<Lecture> searchByCourse(Course course) {
         return em.createQuery("SELECT l FROM Lecture l WHERE l.course = :course"
-                + "ORDER BY l.appiontment.date, l.appointment.time")
+                + "ORDER BY l.appointment.date, l.appointment.time")
                 .setParameter("course", course)
                 .getResultList();
     }
     
-    public List<Lecture> searchByTextAndCourse(String text, Course course) {
-        return em.createQuery("SELECT l FROM Lecture l "
-                + "WHERE l.course = :course "
-                + "AND l.lectureName LIKE :text"
-                + "ORDER BY l.appiontment.date, l.appointment.time")
-                .setParameter("text", text)
-                .setParameter("course", course)
-                .getResultList();
+    public List<Lecture> searchByTextAndCourse(String search, Course course) {
+        // Hilfsobjekt zum Bauen des Query
+        CriteriaBuilder cb = this.em.getCriteriaBuilder();
+        
+        // SELECT t FROM Task t
+        CriteriaQuery<Lecture> query = cb.createQuery(Lecture.class);
+        Root<Lecture> from = query.from(Lecture.class);
+        query.select(from);
+
+        // WHERE l.lectureName LIKE :search
+        Predicate p = cb.conjunction();
+        
+        if (search != null && !search.trim().isEmpty()) {
+            p = cb.and(p, cb.like(from.get("lectureName"), "%" + search + "%"));
+            query.where(p);
+        }
+        
+        if (course != null) {
+            p = cb.and(p, cb.equal(from.get("course"), course));
+            query.where(p);
+        }
+        
+        return em.createQuery(query).getResultList();
     }
 }

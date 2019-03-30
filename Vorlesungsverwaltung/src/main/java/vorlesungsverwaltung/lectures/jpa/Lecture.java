@@ -2,6 +2,7 @@ package vorlesungsverwaltung.lectures.jpa;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -43,7 +44,7 @@ public class Lecture implements Serializable {
     @Size(min = 1, max = 25, message = "Die Bezeichnung muss zwischen ein und 25 Zeichen lang sein.")
     private String lecturer;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Appointment> appointment;
     
     private boolean deleted;
