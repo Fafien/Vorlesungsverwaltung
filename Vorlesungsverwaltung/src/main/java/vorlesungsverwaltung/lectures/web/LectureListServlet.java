@@ -17,57 +17,49 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import vorlesungsverwaltung.lectures.ejb.CourseBean;
+import vorlesungsverwaltung.lectures.ejb.LectureBean;
+import vorlesungsverwaltung.lectures.jpa.Course;
+import vorlesungsverwaltung.lectures.jpa.Lecture;
 
 /**
  * Servlet für die tabellarische Auflisten der Aufgaben.
  */
-@WebServlet(urlPatterns = {"/app/tasks/list/"})
-public class TaskListServlet extends HttpServlet {
-/*
+@WebServlet(urlPatterns = {"/app/lectures/list/"})
+public class LectureListServlet extends HttpServlet {
+
     @EJB
-    private CategoryBean categoryBean;
+    private CourseBean courseBean;
     
     @EJB
-    private TaskBean taskBean;
+    private LectureBean lectureBean;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         // Verfügbare Kategorien und Stati für die Suchfelder ermitteln
-        request.setAttribute("categories", this.categoryBean.findAllSorted());
-        request.setAttribute("statuses", TaskStatus.values());
+        request.setAttribute("courses", this.courseBean.findAllSorted());
 
         // Suchparameter aus der URL auslesen
         String searchText = request.getParameter("search_text");
-        String searchCategory = request.getParameter("search_category");
-        String searchStatus = request.getParameter("search_status");
+        String searchCourse = request.getParameter("search_course");
 
         // Anzuzeigende Aufgaben suchen
-        Category category = null;
-        TaskStatus status = null;
+        Course course = null;
 
-        if (searchCategory != null) {
+        if (searchCourse != null) {
             try {
-                category = this.categoryBean.findById(Long.parseLong(searchCategory));
+                course = this.courseBean.findById(Long.parseLong(searchCourse));
             } catch (NumberFormatException ex) {
-                category = null;
+                course = null;
             }
         }
 
-        if (searchStatus != null) {
-            try {
-                status = TaskStatus.valueOf(searchStatus);
-            } catch (IllegalArgumentException ex) {
-                status = null;
-            }
-
-        }
-
-        List<Task> tasks = this.taskBean.search(searchText, category, status);
-        request.setAttribute("tasks", tasks);
+        List<Lecture> lecture = this.lectureBean.searchByTextAndCourse(searchText, course);
+        request.setAttribute("lectures", lecture);
 
         // Anfrage an die JSP weiterleiten
-        request.getRequestDispatcher("/WEB-INF/tasks/task_list.jsp").forward(request, response);
-    }*/
+        request.getRequestDispatcher("/WEB-INF/lectures/lecture_list.jsp").forward(request, response);
+    }
 }
