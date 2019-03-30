@@ -16,7 +16,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import vorlesungsverwaltung.lectures.ejb.CourseBean;
 import vorlesungsverwaltung.lectures.ejb.LectureBean;
+import vorlesungsverwaltung.lectures.jpa.Course;
 import vorlesungsverwaltung.lectures.jpa.Lecture;
 
 /**
@@ -30,6 +32,7 @@ public class LectureResource {
 
     @EJB
     private LectureBean lectureBean;
+    private CourseBean courseBean;
 
     //TODO: Methoden des Webservices hinzufügen:
     /*Anforderungen an den Webservice sind:
@@ -37,9 +40,14 @@ public class LectureResource {
     * verschiedene Suchfunktionen:
     *
     * GET Methode für Vorlesungen (alle, Filter über Name oder ID, Filter per Kurs)
-    * GET Methode für Kurse (alle, Filter über Name)
     *
      */
+    
+    @GET
+    public Course findCourseByName(String courseName) {
+        return this.courseBean.findByCourseName(courseName);
+    }
+    
     @GET
     public List<Lecture> findLectures() {
         return this.lectureBean.findAll();
