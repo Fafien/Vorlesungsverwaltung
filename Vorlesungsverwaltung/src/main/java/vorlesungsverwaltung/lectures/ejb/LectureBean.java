@@ -94,4 +94,14 @@ public class LectureBean extends EntityBean<Lecture, Long> {
                 .setParameter("course", course)
                 .getResultList();
     }
+    
+    public List<Lecture> searchByTextAndCourse(String text, Course course) {
+        return em.createQuery("SELECT l FROM Lecture l "
+                + "WHERE l.course = :course "
+                + "AND l.lectureName LIKE :text"
+                + "ORDER BY l.appiontment.date, l.appointment.time")
+                .setParameter("text", text)
+                .setParameter("course", course)
+                .getResultList();
+    }
 }
