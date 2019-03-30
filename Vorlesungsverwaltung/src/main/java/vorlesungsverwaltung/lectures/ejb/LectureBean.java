@@ -31,8 +31,8 @@ public class LectureBean extends EntityBean<Lecture, Long> {
     public List<Lecture> searchDeleted(Course course) {
 
         return em.createQuery("SELECT l FROM Lecture l, Appointment a "
-                + "WHERE l.course = :course "
-                + "AND l.deleted = :deleted "
+                + "WHERE l.deleted = :deleted "
+                + "AND l.course = :course "
                 + "ORDER BY a.date, a.time")
                 .setParameter("course", course)
                 .setParameter("deleted", true)
@@ -63,7 +63,7 @@ public class LectureBean extends EntityBean<Lecture, Long> {
         return em.createQuery("SELECT l FROM Lecture l "
                 + "WHERE l.course = :course "
                 + "AND l.deleted = :deleted "
-                + "AND l.appointment.date > :date"
+                + "AND l.appointment.date > :date "
                 + "ORDER BY l.appointment.date, l.appointment.time")
                 .setParameter("course", course)
                 .setParameter("deleted", false)
@@ -79,7 +79,7 @@ public class LectureBean extends EntityBean<Lecture, Long> {
         return em.createQuery("SELECT l FROM Lecture l "
                 + "WHERE l.course = :course "
                 + "AND l.deleted = :deleted "
-                + "AND l.appointment.date = :date"
+                + "AND l.appointment.date = :date "
                 + "ORDER BY l.appointment.date, l.appointment.time")
                 .setParameter("course", course)
                 .setParameter("deleted", false)
