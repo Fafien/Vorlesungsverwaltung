@@ -32,7 +32,7 @@ public class LectureBean extends EntityBean<Lecture, Long> {
 
         return em.createQuery("SELECT l FROM Lecture l, Appointment a "
                 + "WHERE l.course = :course "
-                + "AND l.deleted = :deleted"
+                + "AND l.deleted = :deleted "
                 + "ORDER BY a.date, a.time")
                 .setParameter("course", course)
                 .setParameter("deleted", true)
