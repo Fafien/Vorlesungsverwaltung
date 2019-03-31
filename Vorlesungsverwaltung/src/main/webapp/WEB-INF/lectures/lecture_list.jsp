@@ -32,7 +32,7 @@
         </div>
 
         <div class="menuitem">
-            <a href="<c:url value="/app/courses/"/>">Kurs anlegen</a>
+            <a href="<c:url value="/courses/"/>">Kurs anlegen</a>
         </div>
     </jsp:attribute>
 
@@ -88,11 +88,13 @@
                             <td>
                                 <c:out value="${lecture.lecturer}"/>
                             </td>
-                            <%-- es können mehrere Termine pro Vorlesung sein 
                             <td>
-                                <c:out value="${utils.formatDate(lecture.appointment.date)}"/>
-                                <c:out value="${utils.formatTime(lecture.appointment.time)}"/>
-                            </td>--%>
+                                <c:forEach items="${lecture.appointment}" var="element">
+                                    <c:out value="${utils.formatDate(element.date)}"/>
+                                    <c:out value="${utils.formatTime(element.time)}"/>
+                                    </br>
+                                </c:forEach>
+                            </td>
                         </tr>
                     </c:forEach>
                 </table>

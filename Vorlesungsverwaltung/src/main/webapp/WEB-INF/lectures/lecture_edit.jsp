@@ -80,8 +80,12 @@
                     <span class="required">*</span>
                 </label>
                 <div class="side-by-side">
-                    <input type="text" name="lecture_due_date" value="${lecture_form.values["lecture_due_date"][0]}">
-                    <input type="text" name="lecture_due_time" value="${lecture_form.values["lecture_due_time"][0]}">
+                    <c:forEach items="${lecture_form.values["lecture_due_date"]}" varStatus="loop">
+                        <input type="text" name="lecture_due_date<c:out value="${loop.index}"/>" value="${lecture_form.values["lecture_due_date"][loop.index]}">
+                        <input type="text" name="lecture_due_time<c:out value="${loop.index}"/>" value="${lecture_form.values["lecture_due_time"][loop.index]}">
+                    </c:forEach>
+                    <input type="text" name="lecture_due_date_new">
+                    <input type="text" name="lecture_due_time_new">
                 </div>
 
                 <%-- Button zum Abschicken --%>

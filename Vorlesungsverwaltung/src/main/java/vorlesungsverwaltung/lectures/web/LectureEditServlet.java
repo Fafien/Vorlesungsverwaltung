@@ -65,7 +65,7 @@ public class LectureEditServlet extends HttpServlet {
 
         Lecture lecture = this.getRequestedLecture(request);
         request.setAttribute("edit", lecture.getId() != 0);
-                                
+        
         if (session.getAttribute("lecture_form") == null) {
             // Keine Formulardaten mit fehlerhaften Daten in der Session,
             // daher Formulardaten aus dem Datenbankobjekt übernehmen
@@ -114,11 +114,9 @@ public class LectureEditServlet extends HttpServlet {
         List<String> errors = new ArrayList<>();
 
         String lectureCourse = request.getParameter("lecture_course");
-        String lectureDueDate = request.getParameter("lecture_due_date");
-        String lectureDueTime = request.getParameter("lecture_due_time");
         String lectureName = request.getParameter("lecture_short_text");
         String lecturer = request.getParameter("lecture_lecturer");
-
+        
         Lecture lecture = this.getRequestedLecture(request);
 
         if (lectureCourse != null && !lectureCourse.trim().isEmpty()) {
@@ -129,25 +127,34 @@ public class LectureEditServlet extends HttpServlet {
             }
         }
 
-        Date dueDate = WebUtils.parseDate(lectureDueDate);
-        Time dueTime = WebUtils.parseTime(lectureDueTime);
-
         List<Appointment> appointments = new ArrayList<Appointment>();
-        Appointment appointment = new Appointment();
         
-        if (dueDate != null) {
-            appointment.setDate(dueDate);
-        } else {
-            errors.add("Das Datum muss dem Format dd.mm.yyyy entsprechen.");
-        }
+        String test = "";
+        int i = 0;
+        String date = "lecture_due_date" + i;
+        String time = "lecture_due_time" + i;
+        while(test != null) {
+            Appointment appointment = new Appointment();
+            
+            if (WebUtils.parseDate(request.getParameter(date)) != null) {
+                appointment.setDate(WebUtils.parseDate(request.getParameter(date)));
+            } else {
+                errors.add("Das Datum muss dem Format dd.mm.yyyy entsprechen.");
+            }
 
-        if (dueTime != null) {
-            appointment.setTime(dueTime);
-        } else {
-            errors.add("Die Uhrzeit muss dem Format hh:mm:ss entsprechen.");
+            if (WebUtils.parseTime(request.getParameter(time)) != null) {
+                appointment.setTime(WebUtils.parseTime(request.getParameter(time)));
+            } else {
+                errors.add("Die Uhrzeit muss dem Format hh:mm:ss entsprechen.");
+            }
+            appointment.setLecture(lecture);
+            appointments.add(appointment);
+            
+            date = "lecture_due_date" + i;
+            time = "lecture_due_time" + i;
+            test = request.getParameter(date);
         }
         
-        appointments.add(appointment);
         lecture.setLectureName(lectureName);
         lecture.setLecturer(lecturer);
         lecture.setAppointment(appointments);
@@ -206,10 +213,6 @@ public class LectureEditServlet extends HttpServlet {
     private Lecture getRequestedLecture(HttpServletRequest request) {
         // Zunächst davon ausgehen, dass ein neuer Satz angelegt werden soll
         Lecture lecture = new Lecture();
-        Appointment appointment = new Appointment();
-        appointment.setLecture(lecture);
-        appointment.setDate(new Date(System.currentTimeMillis()));
-        appointment.setTime(new Time(System.currentTimeMillis()));
 
         // ID aus der URL herausschneiden
         String lectureId = request.getPathInfo();
@@ -256,8 +259,8 @@ public class LectureEditServlet extends HttpServlet {
         List<Appointment> appointments = lecture.getAppointment();
         
         if(appointments != null) {
-            String[] dates = null;
-            String[] times = null;
+            String[] dates = new String[appointments.size()];
+            String[] times = new String[appointments.size()];
             
             for(int i = 0; i < appointments.size(); i++) {
                 dates[i] = WebUtils.formatDate(new Date(appointments.get(i).getDate().getTime()));
