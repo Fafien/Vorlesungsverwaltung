@@ -58,6 +58,7 @@ public class EditUserServlet extends HttpServlet {
 
         session.setAttribute("courses", this.courseBean.findAll());
 
+        //Daten für den Benutzer müssen nur geholt werden
         FormValues form = (FormValues) session.getAttribute("edit_form");
         if (form == null || form.getErrors().isEmpty()) {
             form = this.getFormValuesForCurrentUser(currentUser);
