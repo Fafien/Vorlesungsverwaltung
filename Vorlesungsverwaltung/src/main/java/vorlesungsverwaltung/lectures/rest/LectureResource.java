@@ -42,19 +42,19 @@ public class LectureResource {
     * GET Methode für Vorlesungen (alle, Filter über Name oder ID, Filter per Kurs)
     *
      */
-    
     @GET
-    public Course findCourseByName(String courseName) {
-        return this.courseBean.findByCourseName(courseName);
+    public List<Lecture> findByCourseName(String courseName) {
+        Course course = this.courseBean.findByCourseName(courseName);
+        return this.lectureBean.searchByCourse(course);
     }
-    
+
     @GET
     public List<Lecture> findLectures() {
         return this.lectureBean.findAll();
     }
-    
+
     @GET
-    public List<Lecture> findTodaysLectures(){
+    public List<Lecture> findTodaysLectures() {
         return this.lectureBean.searchToday(new Course());
     }
 }
