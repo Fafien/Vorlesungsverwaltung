@@ -153,12 +153,10 @@ public class LectureBean extends EntityBean<Lecture, Long> {
         // Hilfsobjekt zum Bauen des Query
         CriteriaBuilder cb = this.em.getCriteriaBuilder();
         
-        // SELECT t FROM Task t
         CriteriaQuery<Lecture> query = cb.createQuery(Lecture.class);
         Root<Lecture> from = query.from(Lecture.class);
         query.select(from);
 
-        // WHERE l.lectureName LIKE :search
         Predicate p = cb.conjunction();
         
         if (search != null && !search.trim().isEmpty()) {

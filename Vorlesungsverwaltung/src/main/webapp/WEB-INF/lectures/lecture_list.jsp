@@ -72,7 +72,7 @@
                             <th>Vorlesungsname</th>
                             <th>Kurs</th>
                             <th>Dozent</th>
-                            <th>Termin</th>
+                            <th>Termin(e)</th>
                         </tr>
                     </thead>
                     <c:forEach items="${lectures}" var="lecture">

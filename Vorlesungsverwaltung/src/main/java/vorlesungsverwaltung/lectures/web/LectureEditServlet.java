@@ -70,6 +70,7 @@ public class LectureEditServlet extends HttpServlet {
             // Keine Formulardaten mit fehlerhaften Daten in der Session,
             // daher Formulardaten aus dem Datenbankobjekt übernehmen
             request.setAttribute("lecture_form", this.createLectureForm(lecture));
+            session.setAttribute("lecture_form", this.createLectureForm(lecture));
         }
 
         // Weiterleitung an die JSP
@@ -126,43 +127,79 @@ public class LectureEditServlet extends HttpServlet {
                 // Ungültige oder keine ID mitgegeben
             }
         }
-
-        List<Appointment> appointments = new ArrayList<Appointment>();
         
-        String test = "";
+        List<Appointment> appointments = new ArrayList<>();
+        
+        String test = request.getParameter("lecture_due_date0");
         int i = 0;
         String date = "lecture_due_date" + i;
         String time = "lecture_due_time" + i;
         while(test != null) {
             Appointment appointment = new Appointment();
+            boolean empty = false;
+            Date date2 = WebUtils.parseDate(request.getParameter(date));
+            Time time2 = WebUtils.parseTime(request.getParameter(time));
             
-            if (WebUtils.parseDate(request.getParameter(date)) != null) {
-                appointment.setDate(WebUtils.parseDate(request.getParameter(date)));
+            if (date2 != null && !request.getParameter(date).trim().isEmpty()) {
+                appointment.setDate(date2);
             } else {
+                empty = true;
                 errors.add("Das Datum muss dem Format dd.mm.yyyy entsprechen.");
             }
-
-            if (WebUtils.parseTime(request.getParameter(time)) != null) {
-                appointment.setTime(WebUtils.parseTime(request.getParameter(time)));
+            if (time2 != null && !request.getParameter(time).trim().isEmpty()) {
+                appointment.setTime(time2);
             } else {
+                empty = true;
                 errors.add("Die Uhrzeit muss dem Format hh:mm:ss entsprechen.");
             }
-            appointment.setLecture(lecture);
-            appointments.add(appointment);
             
+            if(empty == false) {
+                appointment.setLecture(lecture);
+                appointments.add(appointment);
+            }
+            
+            i++;
             date = "lecture_due_date" + i;
             time = "lecture_due_time" + i;
             test = request.getParameter(date);
         }
         
+        Appointment appointment = new Appointment();
+        boolean empty2 = false;
+        Date date3 = WebUtils.parseDate(request.getParameter("lecture_due_date_new"));
+        Time time3 = WebUtils.parseTime(request.getParameter("lecture_due_time_new"));
+            
+        if (date3 != null && !request.getParameter("lecture_due_date_new").trim().isEmpty()) {
+            appointment.setDate(date3);
+        } else {
+            empty2 = true;
+            errors.add("Das Datum muss dem Format dd.mm.yyyy entsprechen.");
+        }
+
+        if (time3 != null && !request.getParameter("lecture_due_time_new").trim().isEmpty()) {
+            appointment.setTime(time3);
+        } else {
+            empty2 = true;
+            errors.add("Die Uhrzeit muss dem Format hh:mm:ss entsprechen.");
+        }
+        
+        if(empty2 == false) {
+            appointment.setLecture(lecture);
+            appointments.add(appointment);
+        }
+        
         lecture.setLectureName(lectureName);
         lecture.setLecturer(lecturer);
-        lecture.setAppointment(appointments);
         
         this.validationBean.validate(lecture, errors);
 
         // Datensatz speichern
         if (errors.isEmpty()) {
+            List<Appointment> app = lecture.getAppointment();
+            for(int j = 0; j < app.size(); j++) {
+                this.appointmentbean.delete(app.get(j));
+            }
+            lecture.setAppointment(appointments);
             this.lecturebean.update(lecture);
         }
 
@@ -172,11 +209,9 @@ public class LectureEditServlet extends HttpServlet {
             response.sendRedirect(WebUtils.appUrl(request, "/app/lectures/list/"));
         } else {
             // Fehler: Formuler erneut anzeigen
-            FormValues formValues = new FormValues();
-            formValues.setValues(request.getParameterMap());
-            formValues.setErrors(errors);
-
             HttpSession session = request.getSession();
+            FormValues formValues = (FormValues) session.getAttribute("lecture_form");
+            formValues.setErrors(errors);
             session.setAttribute("lecture_form", formValues);
 
             response.sendRedirect(request.getRequestURI());
@@ -267,7 +302,6 @@ public class LectureEditServlet extends HttpServlet {
                 times[i] = WebUtils.formatTime(appointments.get(i).getTime());
             }
             values.put("lecture_due_date", dates);
-
             values.put("lecture_due_time", times);
         }
         

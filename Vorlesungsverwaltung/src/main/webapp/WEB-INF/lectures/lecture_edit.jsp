@@ -76,14 +76,17 @@
                 </div>
                 
                 <label for="lecture_due_date">
-                    Termin:
-                    <span class="required">*</span>
+                    Termin(e):
                 </label>
+                <c:set var="count" value="0" scope="page" />
+                <c:forEach items="${lecture_form.values['lecture_due_date']}" var="loop">
+                    <div class="side-by-side">
+                        <input type="text" name="lecture_due_date<c:out value="${count}"/>" value="${lecture_form.values["lecture_due_date"][count]}">
+                        <input type="text" name="lecture_due_time<c:out value="${count}"/>" value="${lecture_form.values["lecture_due_time"][count]}">
+                    </div>
+                    <c:set var="count" value="${count + 1}" scope="page"/>
+                </c:forEach>
                 <div class="side-by-side">
-                    <c:forEach items="${lecture_form.values["lecture_due_date"]}" varStatus="loop">
-                        <input type="text" name="lecture_due_date<c:out value="${loop.index}"/>" value="${lecture_form.values["lecture_due_date"][loop.index]}">
-                        <input type="text" name="lecture_due_time<c:out value="${loop.index}"/>" value="${lecture_form.values["lecture_due_time"][loop.index]}">
-                    </c:forEach>
                     <input type="text" name="lecture_due_date_new">
                     <input type="text" name="lecture_due_time_new">
                 </div>
