@@ -63,7 +63,7 @@
                     Kurs:
                 </label>
                 <div class="side-by-side">
-                    <select class="js-example-basic-multiple col-md-10 form-control" name="coursename" id="courseSelect" required="required" placeholder="Kurs">
+                    <select class="js-example-basic-multiple col-md-10 form-control" name="coursename" id="courseSelect" placeholder="Kurs">
                         <!-- Leeres Auswahlfeld, damit der Kurs nicht immer zwingend geändert werden muss !-->
                         <option></option>
                         <c:forEach items="${courses}" var="course">

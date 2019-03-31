@@ -55,9 +55,15 @@ public class EditUserServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         User currentUser = this.userBean.getCurrentUser();
         HttpSession session = request.getSession();
+
         session.setAttribute("courses", this.courseBean.findAll());
-        FormValues form = this.getFormValuesForCurrentUser(currentUser);
-        session.setAttribute("edit_form", form);
+
+        FormValues form = (FormValues) session.getAttribute("edit_form");
+        if (form == null || form.getErrors().isEmpty()) {
+            form = this.getFormValuesForCurrentUser(currentUser);
+            session.setAttribute("edit_form", form);
+        }
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/edit/editUser.jsp");
         dispatcher.forward(request, response);
     }
@@ -87,11 +93,11 @@ public class EditUserServlet extends HttpServlet {
         List<String> errors = new ArrayList<>();
 
         if (!user.checkPassword(oldPassword)) {
-            errors.add("Sie haben ein falsches Passwort eingegeben!");
+            errors.add("Die Eingabe Ihres aktuellen Passworts ist leider falsch!");
         }
         if (!newPassword.equals("") && !newPasswordConfirm.equals("")) {
             if (!newPassword.equals(newPasswordConfirm)) {
-                errors.add("Die beiden Passwörter stimmen nicht überein.");
+                errors.add("Ihre beiden neuen Passwörter stimmen nicht überein.");
             } else {
                 user.setPassword(newPassword);
             }
@@ -99,6 +105,8 @@ public class EditUserServlet extends HttpServlet {
         if (courseName != null && !courseName.trim().equals("")) {
             Course course = this.courseBean.findByCourseName(courseName);
             user.setCourse(course);
+        } else {
+            user.setCourse(null);
         }
 
         user.setFirstName(firstName);
