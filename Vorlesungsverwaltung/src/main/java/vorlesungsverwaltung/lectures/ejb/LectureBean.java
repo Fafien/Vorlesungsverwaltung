@@ -9,7 +9,7 @@
  */
 package vorlesungsverwaltung.lectures.ejb;
 
-import java.util.Date;
+import java.sql.Date;
 import vorlesungsverwaltung.common.ejb.EntityBean;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
@@ -31,65 +31,115 @@ public class LectureBean extends EntityBean<Lecture, Long> {
     public LectureBean() {
         super(Lecture.class);
     }
+    
+    public List<Lecture> searchAll(Course course) {
+        if(course == null){
+            return em.createQuery("SELECT l FROM Lecture l ")
+                .getResultList();
+        }
+        else{
+            return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
+                    + "l.course c "
+                    + "WHERE c.courseName = :course ")
+                    .setParameter("course", course.getCourseName())
+                    .getResultList();
+        }
+    }
 
     public List<Lecture> searchDeleted(Course course) {
-
-        return em.createQuery("SELECT l FROM Lecture l, Appointment a "
-                + "WHERE l.deleted = :deleted "
-                + "AND l.course = :course "
-                + "ORDER BY a.date, a.time")
-                .setParameter("course", course)
+        if(course == null){
+            return em.createQuery("SELECT l FROM Lecture l "
+                + "WHERE l.deleted = :deleted ")
                 .setParameter("deleted", true)
                 .getResultList();
-
+        }
+        else{
+            return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
+                    + "l.course c "
+                    + "WHERE l.deleted = :deleted "
+                    + "AND c.courseName = :course ")
+                    .setParameter("deleted", true)
+                    .setParameter("course", course.getCourseName())
+                    .getResultList();
+        }
     }
 
     public List<Lecture> searchBefore(Course course) {
 
-        Date date = new Date();
+        java.sql.Date date = new Date(new java.util.Date().getDate());
 
-        return em.createQuery("SELECT l FROM Lecture l "
-                + "WHERE l.course = :course "
-                + "AND l.deleted = :deleted "
-                + "AND l.appointment.date < :date "
-                + "ORDER BY l.appointment.date, l.appointment.time")
-                .setParameter("course", course)
+        if(course == null){
+            return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
+                + "l.appointment a "
+                + "WHERE l.deleted = :deleted "
+                + "AND a.date < :date")
                 .setParameter("deleted", false)
                 .setParameter("date", date)
                 .getResultList();
-
+        }
+        else{
+            return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
+                    + "l.appointment a INNER JOIN l.course c "
+                    + "WHERE l.deleted = :deleted "
+                    + "AND c.courseName = :course "
+                    + "AND a.date < :date")
+                    .setParameter("deleted", false)
+                    .setParameter("course", course.getCourseName())
+                    .setParameter("date", date)
+                    .getResultList();
+        }
     }
 
     public List<Lecture> searchAfter(Course course) {
 
-        Date date = new Date();
+        java.sql.Date date = new Date(new java.util.Date().getDate());
 
-        return em.createQuery("SELECT l FROM Lecture l "
-                + "WHERE l.course = :course "
-                + "AND l.deleted = :deleted "
-                + "AND l.appointment.date > :date "
-                + "ORDER BY l.appointment.date, l.appointment.time")
-                .setParameter("course", course)
+        if(course == null){
+            return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
+                + "l.appointment a "
+                + "WHERE l.deleted = :deleted "
+                + "AND a.date > :date")
                 .setParameter("deleted", false)
                 .setParameter("date", date)
                 .getResultList();
-
+        }
+        else{
+            return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
+                    + "l.appointment a INNER JOIN l.course c "
+                    + "WHERE l.deleted = :deleted "
+                    + "AND c.courseName = :course "
+                    + "AND a.date > :date")
+                    .setParameter("deleted", false)
+                    .setParameter("course", course.getCourseName())
+                    .setParameter("date", date)
+                    .getResultList();
+        }
     }
 
     public List<Lecture> searchToday(Course course) {
 
-        Date date = new Date();
-
-        return em.createQuery("SELECT l FROM Lecture l "
-                + "WHERE l.course = :course "
-                + "AND l.deleted = :deleted "
-                + "AND l.appointment.date = :date "
-                + "ORDER BY l.appointment.date, l.appointment.time")
-                .setParameter("course", course)
+        java.sql.Date date = new Date(new java.util.Date().getDate());
+                
+        if(course == null){
+            return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
+                + "l.appointment a "
+                + "WHERE l.deleted = :deleted "
+                + "AND a.date = :date")
                 .setParameter("deleted", false)
                 .setParameter("date", date)
                 .getResultList();
-
+        }
+        else{
+            return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
+                + "l.appointment a INNER JOIN l.course c "
+                + "WHERE l.deleted = :deleted "
+                + "AND c.courseName = :course "
+                + "AND a.date = :date")
+                .setParameter("deleted", false)
+                .setParameter("course", course.getCourseName())
+                .setParameter("date", date)
+                .getResultList();
+        }
     }
 
     public List<Lecture> searchByCourse(Course course) {

@@ -1,12 +1,3 @@
-/*
- * Copyright © 2019 Dennis Schulmeister-Zimolong
- * 
- * E-Mail: dhbw@windows3.de
- * Webseite: https://www.wpvs.de/
- * 
- * Dieser Quellcode ist lizenziert unter einer
- * Creative Commons Namensnennung 4.0 International Lizenz.
- */
 package vorlesungsverwaltung.lectures.ejb;
 
 import vorlesungsverwaltung.common.web.WebUtils;
@@ -16,11 +7,10 @@ import vorlesungsverwaltung.dashboard.ejb.DashboardTile;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import vorlesungsverwaltung.common.ejb.UserBean;
 import vorlesungsverwaltung.lectures.jpa.Course;
 
-/**
- * EJB zur Definition der Dashboard-Kacheln für Aufgaben.
- */
+
 @Stateless(name = "lectures")
 public class DashboardContent implements DashboardContentProvider {
 
@@ -29,17 +19,26 @@ public class DashboardContent implements DashboardContentProvider {
 
     @EJB
     private LectureBean lectureBean;
+    
+    @EJB
+    private UserBean userBean;
 
     @Override
     public void createDashboardContent(List<DashboardSection> sections) {
         DashboardSection section = this.createSection(null);
         sections.add(section);
-
-        List<Course> courses = this.courseBean.findAll();
-
-        for (Course course : courses) {
-            section = this.createSection(course);
+        
+        List<Course> courseList = courseBean.findAll();
+        
+        if(userBean.getCurrentUser().getCourse() != null){
+            section = this.createSection(userBean.getCurrentUser().getCourse());
             sections.add(section);
+        }
+        else{
+            for(Course course : courseList){
+                section = this.createSection(course);
+                sections.add(section);
+            }
         }
     }
 
@@ -52,12 +51,12 @@ public class DashboardContent implements DashboardContentProvider {
         if (course != null) {
             section.setLabel(course.getCourseName());
         } else {
-            section.setLabel("Alle Kategorien");
+            section.setLabel("Alle Kurse");
             cssClass = "overview";
         }
 
         // Eine Kachel für alle Aufgaben in dieser Rubrik erzeugen
-        DashboardTile tile = this.createTile(course, "Alle", "Alle", cssClass + " status-all", "calendar");
+        DashboardTile tile = this.createTile(course, "all", cssClass + " status-all", "calendar");
         section.getTiles().add(tile);
 
         // Ja Aufgabenstatus eine weitere Kachel erzeugen
@@ -85,7 +84,7 @@ public class DashboardContent implements DashboardContentProvider {
             
             String cssClass1 = cssClass + " status-" + status;
             
-            tile = this.createTile(course, status, status, cssClass1, icon);
+            tile = this.createTile(course, status, cssClass1, icon);
             section.getTiles().add(tile);
         }
 
@@ -93,35 +92,32 @@ public class DashboardContent implements DashboardContentProvider {
         return section;
     }
 
-    /**
-     * Hilfsmethode zum Erzeugen einer einzelnen Dashboard-Kachel. In dieser
-     * Methode werden auch die in der Kachel angezeigte Anzahl sowie der Link,
-     * auf den die Kachel zeigt, ermittelt.
-     *
-     * @param category
-     * @param status
-     * @param label
-     * @param cssClass
-     * @param icon
-     * @return
-     */
-    private DashboardTile createTile(Course course, String status, String label, String cssClass, String icon) {
+    private DashboardTile createTile(Course course, String status, String cssClass, String icon) {
         int amount = 0;
+        String label = new String("");
         switch(status){
+            case "all":
+                amount = lectureBean.searchAll(course).size();
+                label = "Alle";
+                break;
             case "today":
                 amount = lectureBean.searchToday(course).size();
+                label = "Heute";
                 break;
             case "before":
                 amount = lectureBean.searchBefore(course).size();
+                label = "Anstehend";
                 break;
             case "after":
                 amount = lectureBean.searchAfter(course).size();
+                label = "Vergangen";
                 break;
             case "deleted":
                 amount = lectureBean.searchDeleted(course).size();
+                label = "Abgesagt";
                 break;
         }
-        String href = "/app/tasks/list/";
+        String href = "/app/lectures/list/";
 
         if (course != null) {
             href = WebUtils.addQueryParameter(href, "search_course", "" + course.getId());
