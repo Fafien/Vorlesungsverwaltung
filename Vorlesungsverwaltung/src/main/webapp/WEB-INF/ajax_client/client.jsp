@@ -27,5 +27,12 @@
         <div>
             <div id="result" class="unsichtbar"></div>
         </div>
+        <h1>Alle heutigen Vorlesungen</h1>
+
+        <button onclick="getTodaysLectures()">Abrufen</button>
+
+        <div>
+            <div id="resultToday" class="unsichtbar"></div>
+        </div>
     </jsp:attribute>
 </template:base>

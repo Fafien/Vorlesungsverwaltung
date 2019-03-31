@@ -32,5 +32,30 @@ let search = document.getElementById("search");
                 resultDiv.innerHTML += html;
         });
         }
+        
+async function getTodaysLectures() {
+        let resultDiv = document.getElementById("resultToday");
+        resultDiv.classList.remove('unsichtbar');
+        resultDiv.textContent = "Suche läuft …";
+        //TODO: URL an unseren Service anpassen
+        let url = "http://localhost:8080/REST_Serien_Server_Loesung/api/Series/"
+        + "?query=" + encodeURI(search.value);
+        let antwort = await fetch(url, {
+        method: "get",
+                headers: {
+                "accept": "application/json"
+                }
+        });
+        resultDiv.innerHTML = "";
+        let lectures = await antwort.json();
+        // Abgerufene Daten anzeigen
+        lectures.forEach(series => {
+        //TODO: Pro Eigenschaft Zeile nach Pattern erstellen
+        let html = "<div>\n" +
+        "<b>Name der Eigenschaft:</b> ${lecture.eigenschaft} <br/>\n"+
+        "</div>";
+                resultDiv.innerHTML += html;
+        });
+}
 
 

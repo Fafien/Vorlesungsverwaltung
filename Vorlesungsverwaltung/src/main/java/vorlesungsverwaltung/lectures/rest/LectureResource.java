@@ -52,4 +52,9 @@ public class LectureResource {
     public List<Lecture> findLectures() {
         return this.lectureBean.findAll();
     }
+    
+    @GET
+    public List<Lecture> findTodaysLectures(){
+        return this.lectureBean.searchToday(new Course());
+    }
 }
