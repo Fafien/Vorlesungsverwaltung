@@ -34,6 +34,8 @@ public class AjaxClientServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+
         request.getRequestDispatcher("/WEB-INF/ajax_client/client.jsp").forward(request, response);
     }
 }
