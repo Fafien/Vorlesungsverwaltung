@@ -72,7 +72,9 @@ public class LectureEditServlet extends HttpServlet {
             request.setAttribute("lecture_form", this.createLectureForm(lecture));
             session.setAttribute("lecture_form", this.createLectureForm(lecture));
         }
-
+        
+        request.setAttribute("errors", session.getAttribute("errors"));
+        
         // Weiterleitung an die JSP
         request.getRequestDispatcher("/WEB-INF/lectures/lecture_edit.jsp").forward(request, response);
         
@@ -169,15 +171,19 @@ public class LectureEditServlet extends HttpServlet {
         Date date3 = WebUtils.parseDate(request.getParameter("lecture_due_date_new"));
         Time time3 = WebUtils.parseTime(request.getParameter("lecture_due_time_new"));
             
-        if (date3 != null && !request.getParameter("lecture_due_date_new").trim().isEmpty()) {
+        if (date3 != null) {
             appointment.setDate(date3);
+        } else if(request.getParameter("lecture_due_date_new").trim().isEmpty()) {
+            empty2 = true;
         } else {
             empty2 = true;
             errors.add("Das Datum muss dem Format dd.mm.yyyy entsprechen.");
         }
 
-        if (time3 != null && !request.getParameter("lecture_due_time_new").trim().isEmpty()) {
+        if (time3 != null) {
             appointment.setTime(time3);
+        } else if(request.getParameter("lecture_due_time_new").trim().isEmpty()) {
+            empty2 = true;
         } else {
             empty2 = true;
             errors.add("Die Uhrzeit muss dem Format hh:mm:ss entsprechen.");
@@ -196,23 +202,23 @@ public class LectureEditServlet extends HttpServlet {
         // Datensatz speichern
         if (errors.isEmpty()) {
             List<Appointment> app = lecture.getAppointment();
-            for(int j = 0; j < app.size(); j++) {
-                this.appointmentbean.delete(app.get(j));
+            if(app != null) {
+                for(int j = 0; j < app.size(); j++) {
+                    this.appointmentbean.delete(app.get(j));
+                }
             }
             lecture.setAppointment(appointments);
             this.lecturebean.update(lecture);
         }
-
+        
+        HttpSession session = request.getSession();
         // Weiter zur nächsten Seite
         if (errors.isEmpty()) {
-            // Keine Fehler: Startseite aufrufen
+            session.removeAttribute("errors");
             response.sendRedirect(WebUtils.appUrl(request, "/app/lectures/list/"));
         } else {
             // Fehler: Formuler erneut anzeigen
-            HttpSession session = request.getSession();
-            FormValues formValues = (FormValues) session.getAttribute("lecture_form");
-            formValues.setErrors(errors);
-            session.setAttribute("lecture_form", formValues);
+            session.setAttribute("errors", errors);
 
             response.sendRedirect(request.getRequestURI());
         }

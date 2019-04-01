@@ -106,9 +106,9 @@
             </div>
 
             <%-- Fehlermeldungen --%>
-            <c:if test="${!empty lecture_form.errors}">
+            <c:if test="${!empty errors}">
                 <ul class="errors">
-                    <c:forEach items="${lecture_form.errors}" var="error">
+                    <c:forEach items="${errors}" var="error">
                         <li>${error}</li>
                     </c:forEach>
                 </ul>
