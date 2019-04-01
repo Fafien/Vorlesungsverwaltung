@@ -36,12 +36,12 @@ public class Lecture implements Serializable {
 
     @Column(length = 25)
     @NotNull(message = "Der Vorlesungsname darf nicht leer sein.")
-    @Size(min = 1, max = 25, message = "Die Bezeichnung muss zwischen ein und 25 Zeichen lang sein.")
+    @Size(min = 1, max = 25, message = "Der Vorlesungsname muss zwischen ein und 25 Zeichen lang sein.")
     private String lectureName;
 
     @Column(length = 25)
     @NotNull(message = "Es muss ein Dozent eingetragen sein.")
-    @Size(min = 1, max = 25, message = "Die Bezeichnung muss zwischen ein und 25 Zeichen lang sein.")
+    @Size(min = 1, max = 25, message = "Der Dozent muss zwischen ein und 25 Zeichen lang sein.")
     private String lecturer;
 
     @OneToMany(mappedBy="lecture", fetch = FetchType.EAGER, cascade = CascadeType.ALL)

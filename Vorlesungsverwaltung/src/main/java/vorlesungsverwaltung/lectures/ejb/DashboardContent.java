@@ -60,7 +60,7 @@ public class DashboardContent implements DashboardContentProvider {
         section.getTiles().add(tile);
 
         // Ja Aufgabenstatus eine weitere Kachel erzeugen
-        for(int i = 0; i < 4; i++){
+        for(int i = 0; i < 3; i++){
             String icon = "";
             
             switch (i) {
@@ -75,10 +75,6 @@ public class DashboardContent implements DashboardContentProvider {
                 case 2:
                     icon = "ok";
                     status = "after";
-                    break;
-                case 3:
-                    icon = "cancel";
-                    status = "deleted";
                     break;
             }
             
@@ -111,10 +107,6 @@ public class DashboardContent implements DashboardContentProvider {
             case "after":
                 amount = lectureBean.searchAfter(course).size();
                 label = "Vergangen";
-                break;
-            case "deleted":
-                amount = lectureBean.searchDeleted(course).size();
-                label = "Abgesagt";
                 break;
         }
         String href = "/app/lectures/list/";
