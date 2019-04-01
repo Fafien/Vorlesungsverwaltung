@@ -20,6 +20,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import vorlesungsverwaltung.lectures.jpa.Lecture;
 import vorlesungsverwaltung.lectures.jpa.Course;
+import java.util.Calendar;
 
 /**
  * Einfache EJB mit den üblichen CRUD-Methoden für Aufgaben
@@ -66,13 +67,18 @@ public class LectureBean extends EntityBean<Lecture, Long> {
 
     public List<Lecture> searchBefore(Course course) {
 
-        java.sql.Date date = new Date(new java.util.Date().getDate());
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        Date date = new Date(c.getTimeInMillis());
 
         if(course == null){
             return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
                 + "l.appointment a "
                 + "WHERE l.deleted = :deleted "
-                + "AND a.date < :date")
+                + "AND a.date > :date")
                 .setParameter("deleted", false)
                 .setParameter("date", date)
                 .getResultList();
@@ -92,13 +98,18 @@ public class LectureBean extends EntityBean<Lecture, Long> {
 
     public List<Lecture> searchAfter(Course course) {
 
-        java.sql.Date date = new Date(new java.util.Date().getDate());
-
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        Date date = new Date(c.getTimeInMillis());
+        
         if(course == null){
             return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
                 + "l.appointment a "
                 + "WHERE l.deleted = :deleted "
-                + "AND a.date > :date")
+                + "AND a.date < :date")
                 .setParameter("deleted", false)
                 .setParameter("date", date)
                 .getResultList();
@@ -118,7 +129,12 @@ public class LectureBean extends EntityBean<Lecture, Long> {
 
     public List<Lecture> searchToday(Course course) {
 
-        java.sql.Date date = new Date(new java.util.Date().getDate());
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        Date date = new Date(c.getTimeInMillis());
                 
         if(course == null){
             return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
