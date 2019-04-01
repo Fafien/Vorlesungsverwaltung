@@ -88,7 +88,7 @@ public class LectureBean extends EntityBean<Lecture, Long> {
                     + "l.appointment a INNER JOIN l.course c "
                     + "WHERE l.deleted = :deleted "
                     + "AND c.courseName = :course "
-                    + "AND a.date < :date")
+                    + "AND a.date > :date")
                     .setParameter("deleted", false)
                     .setParameter("course", course.getCourseName())
                     .setParameter("date", date)
@@ -119,7 +119,7 @@ public class LectureBean extends EntityBean<Lecture, Long> {
                     + "l.appointment a INNER JOIN l.course c "
                     + "WHERE l.deleted = :deleted "
                     + "AND c.courseName = :course "
-                    + "AND a.date > :date")
+                    + "AND a.date < :date")
                     .setParameter("deleted", false)
                     .setParameter("course", course.getCourseName())
                     .setParameter("date", date)
