@@ -202,8 +202,10 @@ public class LectureEditServlet extends HttpServlet {
         // Datensatz speichern
         if (errors.isEmpty()) {
             List<Appointment> app = lecture.getAppointment();
-            for(int j = 0; j < app.size(); j++) {
-                this.appointmentbean.delete(app.get(j));
+            if(app != null) {
+                for(int j = 0; j < app.size(); j++) {
+                    this.appointmentbean.delete(app.get(j));
+                }
             }
             lecture.setAppointment(appointments);
             this.lecturebean.update(lecture);
