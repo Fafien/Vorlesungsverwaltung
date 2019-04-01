@@ -1,5 +1,6 @@
 package vorlesungsverwaltung.lectures.jpa;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -15,6 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -44,9 +46,9 @@ public class Lecture implements Serializable {
     @Size(min = 1, max = 25, message = "Der Dozent muss zwischen ein und 25 Zeichen lang sein.")
     private String lecturer;
 
-    @OneToMany(mappedBy="lecture", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Appointment> appointment;
-    
+
     private boolean deleted;
 
     public Lecture() {
@@ -107,5 +109,5 @@ public class Lecture implements Serializable {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
-    
+
 }

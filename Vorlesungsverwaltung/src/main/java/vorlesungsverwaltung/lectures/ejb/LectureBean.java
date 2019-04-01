@@ -26,7 +26,7 @@ import java.util.Calendar;
  * Einfache EJB mit den üblichen CRUD-Methoden für Aufgaben
  */
 @Stateless
-@RolesAllowed("app-user")
+//@RolesAllowed("app-user")
 public class LectureBean extends EntityBean<Lecture, Long> {
 
     public LectureBean() {
@@ -154,8 +154,7 @@ public class LectureBean extends EntityBean<Lecture, Long> {
     }
 
     public List<Lecture> searchByCourse(Course course) {
-        return em.createQuery("SELECT l FROM Lecture l INNER JOIN l.course c WHERE c.course = :course"
-                + "ORDER BY l.appointment.date, l.appointment.time")
+        return em.createQuery("SELECT l FROM Lecture l INNER JOIN l.course c WHERE c.courseName = :course")
                 .setParameter("course", course.getCourseName())
                 .getResultList();
     }

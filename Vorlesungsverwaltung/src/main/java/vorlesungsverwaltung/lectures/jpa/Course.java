@@ -30,10 +30,10 @@ public class Course implements Serializable {
 
     private String courseName;
 
-    @OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
+    //@OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
     private List<User> users;
 
-    @OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
+    //@OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
     private List<Lecture> lectures;
 
     //<editor-fold defaultstate="collapsed" desc="Konstruktoren">

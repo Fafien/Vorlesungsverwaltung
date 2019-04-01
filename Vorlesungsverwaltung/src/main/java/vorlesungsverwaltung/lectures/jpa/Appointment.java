@@ -1,4 +1,3 @@
-
 package vorlesungsverwaltung.lectures.jpa;
 
 import java.io.Serializable;
@@ -19,25 +18,24 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "VORLESUNGSVERWALTUNG_APPOINTMENT")
 public class Appointment implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue
     private long id;
-    
-    @ManyToOne (fetch = FetchType.EAGER)
+
     private Lecture lecture;
-    
+
     @NotNull(message = "Das Datum darf nicht leer sein.")
     private Date date;
 
     @NotNull(message = "Die Uhrzeit darf nicht leer sein.")
     private Time time;
-    
+
     public Appointment() {
     }
-    
+
     public Appointment(Lecture lecture, Date date, Time time) {
         this.lecture = lecture;
         this.date = date;

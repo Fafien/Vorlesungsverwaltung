@@ -9,6 +9,9 @@
  */
 package vorlesungsverwaltung.lectures.rest;
 
+import java.sql.Date;
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
@@ -19,6 +22,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import vorlesungsverwaltung.lectures.ejb.CourseBean;
 import vorlesungsverwaltung.lectures.ejb.LectureBean;
+import vorlesungsverwaltung.lectures.jpa.Appointment;
 import vorlesungsverwaltung.lectures.jpa.Course;
 import vorlesungsverwaltung.lectures.jpa.Lecture;
 
@@ -61,7 +65,7 @@ public class LectureResource {
     @GET
     @Path("/today")
     public List<Lecture> findTodaysLectures() {
-        List<Lecture> lectures = this.lectureBean.searchToday(new Course());
+        List<Lecture> lectures = this.lectureBean.searchToday(null);
         return lectures;
     }
 }
