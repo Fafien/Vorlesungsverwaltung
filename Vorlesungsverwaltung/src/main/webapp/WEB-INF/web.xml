@@ -82,4 +82,16 @@
             <form-error-page>/WEB-INF/login/error.jsp</form-error-page>
         </form-login-config>
     </login-config>
+    <filter>
+      <filter-name>BasicLoginFilter</filter-name>
+      <filter-class>dhbwka.wwi.vertsys.javaee.jtodo.common.web.BasicLoginFilter</filter-class>
+      <init-param>
+        <param-name>role-names-comma-sep</param-name>
+        <param-value>app-user</param-value>
+      </init-param>
+    </filter>
+    <filter-mapping>
+      <filter-name>BasicLoginFilter</filter-name>
+      <url-pattern>/api/*</url-pattern>
+    </filter-mapping>
 </web-app>

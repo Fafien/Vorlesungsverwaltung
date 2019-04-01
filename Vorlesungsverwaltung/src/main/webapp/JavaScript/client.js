@@ -14,13 +14,16 @@ async function getLectures() {
     let resultDiv = document.getElementById("result");
     resultDiv.textContent = "Suche läuft …";
     resultDiv.classList.remove("unsichtbar");
-    //TODO: URL an unseren Service anpassen
     let url = "http://localhost:8080/vorlesungsverwaltung/api/Lectures/"
             + encodeURI(search.value);
     let antwort = await fetch(url, {
         method: "get",
         headers: {
             "accept": "application/json"
+            "authentification": {
+                "username": "USERNAME IN BASE 64",
+                "password": "PASSWORD IN BASE 64"
+            }
         }
     });
     resultDiv.innerHTML = "";
@@ -29,7 +32,9 @@ async function getLectures() {
     lectures.forEach(lecture => {
         //TODO: Pro Eigenschaft Zeile nach Pattern erstellen
         let html = "<div>" +
-                "<b>Name der Eigenschaft:</b>" + lecture.lectureName + "<br/>" +
+                "<b>Name der Eigenschaft: </b>" + lecture.lectureName + "<br/>" +
+                "<b>Name der Eigenschaft: </b>" + lecture.lecturer + "<br/>" +
+                "<b>Name der Eigenschaft: </b>" + lecture.course + "<br/>" +
                 "</div>";
         resultDiv.innerHTML += html;
     });
@@ -39,7 +44,6 @@ async function getTodaysLectures() {
     let resultDiv = document.getElementById("resultToday");
     resultDiv.classList.remove('unsichtbar');
     resultDiv.textContent = "Suche läuft …";
-    //TODO: URL an unseren Service anpassen
     let url = "http://localhost:8080/vorlesungsverwaltung/api/Lectures/today";
     let antwort = await fetch(url, {
         method: "get",
@@ -53,7 +57,9 @@ async function getTodaysLectures() {
     lectures.forEach(lecture => {
         //TODO: Pro Eigenschaft Zeile nach Pattern erstellen
         let html = "<div>" +
-                "<b>Name der Eigenschaft:</b>" + lecture.lectureName + "<br/>" +
+                "<b>Name der Eigenschaft: </b>" + lecture.lectureName + "<br/>" +
+                "<b>Name der Eigenschaft: </b>" + lecture.lecturer + "<br/>" +
+                "<b>Name der Eigenschaft: </b>" + lecture.course + "<br/>" +
                 "</div>";
         resultDiv.innerHTML += html;
     });

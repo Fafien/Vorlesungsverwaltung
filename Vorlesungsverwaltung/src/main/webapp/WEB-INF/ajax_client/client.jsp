@@ -19,6 +19,11 @@
     </jsp:attribute>
 
     <jsp:attribute name="content">
+        <h1>Login</h1>
+        <input type="text" id="name" value="">
+        <input type="text" id="password" value="">
+        <button>Anmelden</button>
+        
         <h1>Alle meine Vorlesungen</h1>
 
         <input type="text" id="search" value="">
