@@ -74,14 +74,13 @@ public class LectureBean extends EntityBean<Lecture, Long> {
 
         if (course == null) {
             return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
-                + "l.appointment a "
-                + "WHERE l.deleted = :deleted "
-                + "AND a.date > :date")
-                .setParameter("deleted", false)
-                .setParameter("date", date)
-                .getResultList();
-        }
-        else{
+                    + "l.appointment a "
+                    + "WHERE l.deleted = :deleted "
+                    + "AND a.date > :date")
+                    .setParameter("deleted", false)
+                    .setParameter("date", date)
+                    .getResultList();
+        } else {
             return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
                     + "l.appointment a INNER JOIN l.course c "
                     + "WHERE l.deleted = :deleted "
@@ -102,9 +101,16 @@ public class LectureBean extends EntityBean<Lecture, Long> {
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
         Date date = new Date(c.getTimeInMillis());
-        
-        if(course == null){
+
+        if (course == null) {
             return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
+                    + "l.appointment a "
+                    + "WHERE l.deleted = :deleted "
+                    + "AND a.date < :date")
+                    .setParameter("deleted", false)
+                    .setParameter("date", date)
+                    .getResultList();
+        } else {
             return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
                     + "l.appointment a INNER JOIN l.course c "
                     + "WHERE l.deleted = :deleted "
@@ -119,14 +125,14 @@ public class LectureBean extends EntityBean<Lecture, Long> {
 
     public List<Lecture> searchToday(Course course) {
 
-                + "l.appointment a "
-                + "WHERE l.deleted = :deleted "
-                + "AND a.date < :date")
-                .setParameter("deleted", false)
-                .setParameter("date", date)
-                .getResultList();
-        }
-        else{
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        Date date = new Date(c.getTimeInMillis());
+
+        if (course == null) {
             return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
                     + "l.appointment a "
                     + "WHERE l.deleted = :deleted "
@@ -148,7 +154,7 @@ public class LectureBean extends EntityBean<Lecture, Long> {
     }
 
     public List<Lecture> searchByCourse(Course course) {
-        return em.createQuery("SELECT l FROM Lecture l INNER JOIN l.course c WHERE c.courseName = :course"
+        return em.createQuery("SELECT l FROM Lecture l INNER JOIN l.course c WHERE c.course = :course"
                 + "ORDER BY l.appointment.date, l.appointment.time")
                 .setParameter("course", course.getCourseName())
                 .getResultList();
