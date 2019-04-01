@@ -10,6 +10,7 @@
 package vorlesungsverwaltung.lectures.web;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -42,7 +43,7 @@ public class LectureListServlet extends HttpServlet {
         request.setAttribute("courses", this.courseBean.findAllSorted());
 
         // Suchparameter aus der URL auslesen
-        String searchText = request.getParameter("search_text");
+        String searchStatus = request.getParameter("search_status");
         String searchCourse = request.getParameter("search_course");
 
         // Anzuzeigende Aufgaben suchen
@@ -56,7 +57,25 @@ public class LectureListServlet extends HttpServlet {
             }
         }
         
-        List<Lecture> lectures = this.lectureBean.searchByTextAndCourse(searchText, course);
+        List<Lecture> lectures = new ArrayList<>();
+        if(searchStatus == null) {
+            lectures = this.lectureBean.findAll();
+        } else {
+            switch(searchStatus) {
+            case "before":
+                lectures = this.lectureBean.searchBefore(course);
+                break;
+            case "after":
+                lectures = this.lectureBean.searchAfter(course);
+                break;
+            case "all":
+                lectures = this.lectureBean.searchAll(course);
+                break;
+            case "deleted":
+                lectures = this.lectureBean.searchDeleted(course);
+                break;
+            }
+        }
         request.setAttribute("lectures", lectures);
 
         // Anfrage an die JSP weiterleiten
