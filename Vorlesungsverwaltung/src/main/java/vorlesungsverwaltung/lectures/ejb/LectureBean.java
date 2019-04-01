@@ -26,19 +26,18 @@ import java.util.Calendar;
  * Einfache EJB mit den üblichen CRUD-Methoden für Aufgaben
  */
 @Stateless
-@RolesAllowed("app-user")
+//@RolesAllowed("app-user")
 public class LectureBean extends EntityBean<Lecture, Long> {
 
     public LectureBean() {
         super(Lecture.class);
     }
-    
+
     public List<Lecture> searchAll(Course course) {
-        if(course == null){
+        if (course == null) {
             return em.createQuery("SELECT l FROM Lecture l ")
-                .getResultList();
-        }
-        else{
+                    .getResultList();
+        } else {
             return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
                     + "l.course c "
                     + "WHERE c.courseName = :course ")
@@ -48,13 +47,12 @@ public class LectureBean extends EntityBean<Lecture, Long> {
     }
 
     public List<Lecture> searchDeleted(Course course) {
-        if(course == null){
+        if (course == null) {
             return em.createQuery("SELECT l FROM Lecture l "
-                + "WHERE l.deleted = :deleted ")
-                .setParameter("deleted", true)
-                .getResultList();
-        }
-        else{
+                    + "WHERE l.deleted = :deleted ")
+                    .setParameter("deleted", true)
+                    .getResultList();
+        } else {
             return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
                     + "l.course c "
                     + "WHERE l.deleted = :deleted "
@@ -74,16 +72,15 @@ public class LectureBean extends EntityBean<Lecture, Long> {
         c.set(Calendar.MILLISECOND, 0);
         Date date = new Date(c.getTimeInMillis());
 
-        if(course == null){
+        if (course == null) {
             return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
-                + "l.appointment a "
-                + "WHERE l.deleted = :deleted "
-                + "AND a.date > :date")
-                .setParameter("deleted", false)
-                .setParameter("date", date)
-                .getResultList();
-        }
-        else{
+                    + "l.appointment a "
+                    + "WHERE l.deleted = :deleted "
+                    + "AND a.date > :date")
+                    .setParameter("deleted", false)
+                    .setParameter("date", date)
+                    .getResultList();
+        } else {
             return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
                     + "l.appointment a INNER JOIN l.course c "
                     + "WHERE l.deleted = :deleted "
@@ -104,17 +101,16 @@ public class LectureBean extends EntityBean<Lecture, Long> {
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
         Date date = new Date(c.getTimeInMillis());
-        
-        if(course == null){
+
+        if (course == null) {
             return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
-                + "l.appointment a "
-                + "WHERE l.deleted = :deleted "
-                + "AND a.date < :date")
-                .setParameter("deleted", false)
-                .setParameter("date", date)
-                .getResultList();
-        }
-        else{
+                    + "l.appointment a "
+                    + "WHERE l.deleted = :deleted "
+                    + "AND a.date < :date")
+                    .setParameter("deleted", false)
+                    .setParameter("date", date)
+                    .getResultList();
+        } else {
             return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
                     + "l.appointment a INNER JOIN l.course c "
                     + "WHERE l.deleted = :deleted "
@@ -135,56 +131,54 @@ public class LectureBean extends EntityBean<Lecture, Long> {
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
         Date date = new Date(c.getTimeInMillis());
-                
-        if(course == null){
+
+        if (course == null) {
             return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
-                + "l.appointment a "
-                + "WHERE l.deleted = :deleted "
-                + "AND a.date = :date")
-                .setParameter("deleted", false)
-                .setParameter("date", date)
-                .getResultList();
-        }
-        else{
+                    + "l.appointment a "
+                    + "WHERE l.deleted = :deleted "
+                    + "AND a.date = :date")
+                    .setParameter("deleted", false)
+                    .setParameter("date", date)
+                    .getResultList();
+        } else {
             return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
-                + "l.appointment a INNER JOIN l.course c "
-                + "WHERE l.deleted = :deleted "
-                + "AND c.courseName = :course "
-                + "AND a.date = :date")
-                .setParameter("deleted", false)
-                .setParameter("course", course.getCourseName())
-                .setParameter("date", date)
-                .getResultList();
+                    + "l.appointment a INNER JOIN l.course c "
+                    + "WHERE l.deleted = :deleted "
+                    + "AND c.courseName = :course "
+                    + "AND a.date = :date")
+                    .setParameter("deleted", false)
+                    .setParameter("course", course.getCourseName())
+                    .setParameter("date", date)
+                    .getResultList();
         }
     }
 
     public List<Lecture> searchByCourse(Course course) {
-        return em.createQuery("SELECT l FROM Lecture l WHERE l.course = :course"
-                + "ORDER BY l.appointment.date, l.appointment.time")
-                .setParameter("course", course)
+        return em.createQuery("SELECT l FROM Lecture l INNER JOIN l.course c WHERE c.courseName = :course")
+                .setParameter("course", course.getCourseName())
                 .getResultList();
     }
-    
+
     public List<Lecture> searchByTextAndCourse(String search, Course course) {
         // Hilfsobjekt zum Bauen des Query
         CriteriaBuilder cb = this.em.getCriteriaBuilder();
-        
+
         CriteriaQuery<Lecture> query = cb.createQuery(Lecture.class);
         Root<Lecture> from = query.from(Lecture.class);
         query.select(from);
 
         Predicate p = cb.conjunction();
-        
+
         if (search != null && !search.trim().isEmpty()) {
             p = cb.and(p, cb.like(from.get("lectureName"), "%" + search + "%"));
             query.where(p);
         }
-        
+
         if (course != null) {
             p = cb.and(p, cb.equal(from.get("course"), course));
             query.where(p);
         }
-        
+
         return em.createQuery(query).getResultList();
     }
 }

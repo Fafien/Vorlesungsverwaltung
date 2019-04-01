@@ -146,7 +146,7 @@ public class CourseListServlet extends HttpServlet {
                 continue;
             }
 
-            List<Lecture> lectures = course.getLectures();
+            List<Lecture> lectures = this.lectureBean.searchByCourse(course);
 
             if (lectures != null) {
                 lectures.forEach((Lecture lecture) -> {

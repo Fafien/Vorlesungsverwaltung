@@ -18,7 +18,7 @@ import javax.ws.rs.ApplicationPath;
  *
  * @author Licht
  */
-@ApplicationPath("app/api")
+@ApplicationPath("api")
 public class LecturesRestAPI extends Application {
 
     @Override
