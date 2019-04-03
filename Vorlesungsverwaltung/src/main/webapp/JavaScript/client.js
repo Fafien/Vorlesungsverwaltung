@@ -17,11 +17,18 @@ class Lecture {
         resultDiv.classList.remove("unsichtbar");
         let url = "http://localhost:8080/vorlesungsverwaltung/api/Lectures/"
                 + encodeURI(search.value);
+
+        if (this.username === "" || this.password === "") {
+            alert("Bitte geben Sie Ihren Benutzernamen und Ihr Passwort ein!");
+            return;
+        }
+        let authorization = btoa(`${this.username}:${this.password}`);
+
         let antwort = await fetch(url, {
             method: "get",
             headers: {
                 "accept": "application/json",
-                "Authorization": "Basic " + window.btoa(this.username + ":" + this.password)
+                "Authorization": `Basic ${authorization}`
             }
         });
         resultDiv.innerHTML = "";
@@ -42,11 +49,18 @@ class Lecture {
         resultDiv.classList.remove('unsichtbar');
         resultDiv.textContent = "Suche läuft …";
         let url = "http://localhost:8080/vorlesungsverwaltung/api/Lectures/today";
+
+        if (this.username === "" || this.password === "") {
+            alert("Bitte geben Sie Ihren Benutzernamen und Ihr Passwort ein!");
+            return;
+        }
+        let authorization = btoa(`${this.username}:${this.password}`);
+
         let antwort = await fetch(url, {
             method: "get",
             headers: {
                 "accept": "application/json",
-                "Authorization": "Basic " + window.btoa(this.username + ":" + this.password)
+                "Authorization": `Basic ${authorization}`
             }
         });
         resultDiv.innerHTML = "";
