@@ -50,7 +50,7 @@ public class User implements Serializable {
 
     private String lastName = "";
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
             name = "VORLESUNGSVERWALTUNG_USER_GROUP",
             joinColumns = @JoinColumn(name = "USERNAME")
