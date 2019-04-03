@@ -32,7 +32,7 @@
         </div>
 
         <div class="menuitem">
-            <a href="<c:url value="/courses/"/>">Kurs anlegen</a>
+            <a href="<c:url value="/app/course/"/>">Kurse</a>
         </div>
     </jsp:attribute>
 
