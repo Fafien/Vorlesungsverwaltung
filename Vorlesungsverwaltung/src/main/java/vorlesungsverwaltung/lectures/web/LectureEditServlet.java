@@ -219,6 +219,10 @@ public class LectureEditServlet extends HttpServlet {
         } else {
             // Fehler: Formuler erneut anzeigen
             session.setAttribute("errors", errors);
+            FormValues formValues = new FormValues();
+            formValues.setValues(request.getParameterMap());
+            
+            session.setAttribute("lecture_form", formValues);
 
             response.sendRedirect(request.getRequestURI());
         }
