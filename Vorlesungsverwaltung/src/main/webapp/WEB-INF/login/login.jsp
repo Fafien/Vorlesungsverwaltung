@@ -26,6 +26,9 @@
         <div class="menuitem">
             <a href="<c:url value="/signup/"/>">Registrieren</a>
         </div>
+        <div class="menuitem">
+            <a href="<c:url value="/ajaxclient"/>">AJAX Client</a>
+        </div>
     </jsp:attribute>
 
     <jsp:attribute name="content">

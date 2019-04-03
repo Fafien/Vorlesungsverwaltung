@@ -12,6 +12,10 @@
 
     <jsp:attribute name="head">
         <link rel="stylesheet" href="<c:url value="/css/ajax_client/style.css"/>" />
+        <script>
+            lecture = new Lecture();
+            lecture.setAuthData("username", "password");
+        </script>
     </jsp:attribute>
 
     <jsp:attribute name="menu">
@@ -20,9 +24,21 @@
 
     <jsp:attribute name="content">
         <h1>Login</h1>
-        <input type="text" id="name" value="">
-        <input type="text" id="password" value="">
-        <button>Anmelden</button>
+        <label for="j_username">
+            Benutzername:
+            <span class="required">*</span>
+        </label>
+        <input type="text" name="j_username" id="j_username">
+
+        <label for="j_password">
+            Passwort:
+            <span class="required">*</span>
+        </label>
+        <input type="password" name="j_password" id="j_password">
+
+        <button class="icon-login" onclick="lecture.setAuthData(document.getElementById('j_username').value,document.getElementById('j_password').value)">
+            Einloggen
+        </button>
         
         <h1>Alle meine Vorlesungen</h1>
 
@@ -35,6 +51,14 @@
         <h1>Alle heutigen Vorlesungen</h1>
 
         <button onclick="getTodaysLectures()">Abrufen</button>
+
+        <div>
+            <div id="resultToday" class="unsichtbar"></div>
+        </div>
+        
+        <h1>Alle Vorlesungen</h1>
+
+        <button onclick="getAllLectures()">Abrufen</button>
 
         <div>
             <div id="resultToday" class="unsichtbar"></div>

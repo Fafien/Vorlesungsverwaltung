@@ -9,6 +9,19 @@
  */
 /* global antwort */
 
+class Lectures {
+    constructor(url) {
+        this.url = url || "http://localhost:8080/vorlesungsverwaltung/api/Lectures/";
+        this.username = "";
+        this.password = "";
+    }
+
+    async function setAuthData(username, password) {
+        this.username = username;
+        this.password = password;
+    }
+}
+
 async function getLectures() {
     let search = document.getElementById("search");
     let resultDiv = document.getElementById("result");
@@ -20,21 +33,17 @@ async function getLectures() {
         method: "get",
         headers: {
             "accept": "application/json"
-            "authentification": {
-                "username": "USERNAME IN BASE 64",
-                "password": "PASSWORD IN BASE 64"
-            }
+            "authorization": "Basic " + btoa(this.username + ":" + this.password)
         }
     });
     resultDiv.innerHTML = "";
     let lectures = await antwort.json();
     // Abgerufene Daten anzeigen
     lectures.forEach(lecture => {
-        //TODO: Pro Eigenschaft Zeile nach Pattern erstellen
         let html = "<div>" +
-                "<b>Name der Eigenschaft: </b>" + lecture.lectureName + "<br/>" +
-                "<b>Name der Eigenschaft: </b>" + lecture.lecturer + "<br/>" +
-                "<b>Name der Eigenschaft: </b>" + lecture.course + "<br/>" +
+                "<b>Vorlesungsname: </b>" + lecture.lectureName + "<br/>" +
+                "<b>Dozent/-in: </b>" + lecture.lecturer + "<br/>" +
+                "<b>Kurs: </b>" + lecture.course + "<br/>" +
                 "</div>";
         resultDiv.innerHTML += html;
     });
@@ -49,17 +58,43 @@ async function getTodaysLectures() {
         method: "get",
         headers: {
             "accept": "application/json"
+            "authorization": "Basic " + btoa(this.username + ":" + this.password)
         }
     });
     resultDiv.innerHTML = "";
     let lectures = await antwort.json();
     // Abgerufene Daten anzeigen
     lectures.forEach(lecture => {
-        //TODO: Pro Eigenschaft Zeile nach Pattern erstellen
         let html = "<div>" +
-                "<b>Name der Eigenschaft: </b>" + lecture.lectureName + "<br/>" +
-                "<b>Name der Eigenschaft: </b>" + lecture.lecturer + "<br/>" +
-                "<b>Name der Eigenschaft: </b>" + lecture.course + "<br/>" +
+                "<b>Vorlesungsname: </b>" + lecture.lectureName + "<br/>" +
+                "<b>Dozent/-in: </b>" + lecture.lecturer + "<br/>" +
+                "<b>Kurs: </b>" + lecture.course + "<br/>" +
+                "</div>";
+        resultDiv.innerHTML += html;
+    });
+}
+
+async function getAllLectures() {
+    let search = document.getElementById("search");
+    let resultDiv = document.getElementById("result");
+    resultDiv.textContent = "Suche läuft …";
+    resultDiv.classList.remove("unsichtbar");
+    let url = "http://localhost:8080/vorlesungsverwaltung/api/Lectures/all";
+    let antwort = await fetch(url, {
+        method: "get",
+        headers: {
+            "accept": "application/json"
+            "authorization": "Basic " + btoa(this.username + ":" + this.password)
+        }
+    });
+    resultDiv.innerHTML = "";
+    let lectures = await antwort.json();
+    // Abgerufene Daten anzeigen
+    lectures.forEach(lecture => {
+        let html = "<div>" +
+                "<b>Vorlesungsname: </b>" + lecture.lectureName + "<br/>" +
+                "<b>Dozent/-in: </b>" + lecture.lecturer + "<br/>" +
+                "<b>Kurs: </b>" + lecture.course + "<br/>" +
                 "</div>";
         resultDiv.innerHTML += html;
     });
