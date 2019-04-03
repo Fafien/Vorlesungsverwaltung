@@ -39,6 +39,12 @@ public class UserBean extends EntityBean<User, String> {
         return this.em.find(User.class, this.ctx.getCallerPrincipal().getName());
     }
 
+    public User findByUsername(String username) {
+        return (User) this.em.createQuery("SELECT u FROM User u WHERE u.username = :userName")
+                .setParameter("userName", username)
+                .getSingleResult();
+    }
+    
     /**
      *
      * @param username

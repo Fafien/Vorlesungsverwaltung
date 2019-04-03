@@ -45,24 +45,7 @@ public class LectureBean extends EntityBean<Lecture, Long> {
                     .getResultList();
         }
     }
-
-    public List<Lecture> searchDeleted(Course course) {
-        if (course == null) {
-            return em.createQuery("SELECT l FROM Lecture l "
-                    + "WHERE l.deleted = :deleted ")
-                    .setParameter("deleted", true)
-                    .getResultList();
-        } else {
-            return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
-                    + "l.course c "
-                    + "WHERE l.deleted = :deleted "
-                    + "AND c.courseName = :course ")
-                    .setParameter("deleted", true)
-                    .setParameter("course", course.getCourseName())
-                    .getResultList();
-        }
-    }
-
+    
     public List<Lecture> searchBefore(Course course) {
 
         Calendar c = Calendar.getInstance();
@@ -142,6 +125,96 @@ public class LectureBean extends EntityBean<Lecture, Long> {
                     .getResultList();
         } else {
             return em.createQuery("SELECT l FROM Lecture l INNER JOIN "
+                    + "l.appointment a INNER JOIN l.course c "
+                    + "WHERE l.deleted = :deleted "
+                    + "AND c.courseName = :course "
+                    + "AND a.date = :date")
+                    .setParameter("deleted", false)
+                    .setParameter("course", course.getCourseName())
+                    .setParameter("date", date)
+                    .getResultList();
+        }
+    }
+    
+    public List<Lecture> searchBefore2(Course course) {
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        Date date = new Date(c.getTimeInMillis());
+
+        if (course == null) {
+            return em.createQuery("SELECT DISTINCT l FROM Lecture l INNER JOIN "
+                    + "l.appointment a "
+                    + "WHERE l.deleted = :deleted "
+                    + "AND a.date > :date")
+                    .setParameter("deleted", false)
+                    .setParameter("date", date)
+                    .getResultList();
+        } else {
+            return em.createQuery("SELECT DISTINCT l FROM Lecture l INNER JOIN "
+                    + "l.appointment a INNER JOIN l.course c "
+                    + "WHERE l.deleted = :deleted "
+                    + "AND c.courseName = :course "
+                    + "AND a.date > :date")
+                    .setParameter("deleted", false)
+                    .setParameter("course", course.getCourseName())
+                    .setParameter("date", date)
+                    .getResultList();
+        }
+    }
+
+    public List<Lecture> searchAfter2(Course course) {
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        Date date = new Date(c.getTimeInMillis());
+
+        if (course == null) {
+            return em.createQuery("SELECT DISTINCT l FROM Lecture l INNER JOIN "
+                    + "l.appointment a "
+                    + "WHERE l.deleted = :deleted "
+                    + "AND a.date < :date")
+                    .setParameter("deleted", false)
+                    .setParameter("date", date)
+                    .getResultList();
+        } else {
+            return em.createQuery("SELECT DISTINCT l FROM Lecture l INNER JOIN "
+                    + "l.appointment a INNER JOIN l.course c "
+                    + "WHERE l.deleted = :deleted "
+                    + "AND c.courseName = :course "
+                    + "AND a.date < :date")
+                    .setParameter("deleted", false)
+                    .setParameter("course", course.getCourseName())
+                    .setParameter("date", date)
+                    .getResultList();
+        }
+    }
+
+    public List<Lecture> searchToday2(Course course) {
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        Date date = new Date(c.getTimeInMillis());
+
+        if (course == null) {
+            return em.createQuery("SELECT DISTINCT l FROM Lecture l INNER JOIN "
+                    + "l.appointment a "
+                    + "WHERE l.deleted = :deleted "
+                    + "AND a.date = :date")
+                    .setParameter("deleted", false)
+                    .setParameter("date", date)
+                    .getResultList();
+        } else {
+            return em.createQuery("SELECT DISTINCT l FROM Lecture l INNER JOIN "
                     + "l.appointment a INNER JOIN l.course c "
                     + "WHERE l.deleted = :deleted "
                     + "AND c.courseName = :course "

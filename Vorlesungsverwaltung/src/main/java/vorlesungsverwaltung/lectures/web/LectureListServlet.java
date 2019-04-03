@@ -63,16 +63,16 @@ public class LectureListServlet extends HttpServlet {
         } else {
             switch(searchStatus) {
             case "before":
-                lectures = this.lectureBean.searchBefore(course);
+                lectures = this.lectureBean.searchBefore2(course);
+                break;
+            case "today":
+                lectures = this.lectureBean.searchToday2(course);
                 break;
             case "after":
-                lectures = this.lectureBean.searchAfter(course);
+                lectures = this.lectureBean.searchAfter2(course);
                 break;
             case "all":
                 lectures = this.lectureBean.searchAll(course);
-                break;
-            case "deleted":
-                lectures = this.lectureBean.searchDeleted(course);
                 break;
             }
         }
