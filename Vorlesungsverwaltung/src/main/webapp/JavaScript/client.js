@@ -15,7 +15,7 @@ class Lecture {
         let resultDiv = document.getElementById("result");
         resultDiv.textContent = "Suche läuft …";
         resultDiv.classList.remove("unsichtbar");
-        let url = "http://localhost:8080/vorlesungsverwaltung/api/Lectures/"
+        let url = "https://localhost:8443/vorlesungsverwaltung/api/Lectures/"
                 + encodeURI(search.value);
 
         if (this.username === "" || this.password === "") {
@@ -48,7 +48,7 @@ class Lecture {
         let resultDiv = document.getElementById("resultToday");
         resultDiv.classList.remove('unsichtbar');
         resultDiv.textContent = "Suche läuft …";
-        let url = "http://localhost:8080/vorlesungsverwaltung/api/Lectures/today";
+        let url = "https://localhost:8443/vorlesungsverwaltung/api/Lectures/today";
 
         if (this.username === "" || this.password === "") {
             alert("Bitte geben Sie Ihren Benutzernamen und Ihr Passwort ein!");
@@ -80,7 +80,7 @@ class Lecture {
         let resultDiv = document.getElementById("resultAll");
         resultDiv.textContent = "Suche läuft …";
         resultDiv.classList.remove("unsichtbar");
-        let url = "http://localhost:8080/vorlesungsverwaltung/api/Lectures/all";
+        let url = "https://localhost:8443/vorlesungsverwaltung/api/Lectures/all";
 
         if (this.username === "" || this.password === "") {
             alert("Bitte geben Sie Ihren Benutzernamen und Ihr Passwort ein!");

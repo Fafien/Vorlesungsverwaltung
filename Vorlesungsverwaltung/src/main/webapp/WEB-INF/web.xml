@@ -54,6 +54,12 @@
         </user-data-constraint>
     </security-constraint>
 
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>BASIC auth path</web-resource-name>
+            <url-pattern>/api/*</url-pattern>
+        </web-resource-collection>
+    </security-constraint>
     <!--
         Übersicht über alle von dieser Webanwendung genutzten Benutzerollen
         für den Admin. Die Vergabe der Rollen erfolgt durch Hinzufügen der
@@ -82,6 +88,7 @@
             <form-error-page>/WEB-INF/login/error.jsp</form-error-page>
         </form-login-config>
     </login-config>
+    
     <filter>
         <filter-name>BasicLoginFilter</filter-name>
         <filter-class>vorlesungsverwaltung.lectures.rest.BasicLoginFilter</filter-class>
