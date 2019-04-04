@@ -12,91 +12,47 @@ class Lecture {
 
     async getLectures() {
         let search = document.getElementById("search");
-        let resultDiv = document.getElementById("result");
-        resultDiv.textContent = "Suche läuft …";
-        resultDiv.classList.remove("unsichtbar");
         let url = "https://localhost:8443/vorlesungsverwaltung/api/Lectures/"
                 + encodeURI(search.value);
-
-        if (this.username === "" || this.password === "") {
-            alert("Bitte geben Sie Ihren Benutzernamen und Ihr Passwort ein!");
-            return;
-        }
-        let authorization = btoa(`${this.username}:${this.password}`);
-
-        let antwort = await fetch(url, {
-            method: "get",
-            headers: {
-                "accept": "application/json",
-                "Authorization": `Basic ${authorization}`
-            }
-        });
-        resultDiv.innerHTML = "";
-        let lectures = await antwort.json();
-        // Abgerufene Daten anzeigen
-        lectures.forEach(lecture => {
-            let html = "<div>" +
-                    "<b>Vorlesungsname: </b>" + lecture.lectureName + "<br/>" +
-                    "<b>Dozent/-in: </b>" + lecture.lecturer + "<br/>" +
-                    "<b>Kurs: </b>" + lecture.course + "<br/>" +
-                    "</div>";
-            resultDiv.innerHTML += html;
-        });
+        this.getResults(url);
     }
 
     async getTodaysLectures() {
-        let resultDiv = document.getElementById("resultToday");
-        resultDiv.classList.remove('unsichtbar');
-        resultDiv.textContent = "Suche läuft …";
         let url = "https://localhost:8443/vorlesungsverwaltung/api/Lectures/today";
-
-        if (this.username === "" || this.password === "") {
-            alert("Bitte geben Sie Ihren Benutzernamen und Ihr Passwort ein!");
-            return;
-        }
-        let authorization = btoa(`${this.username}:${this.password}`);
-
-        let antwort = await fetch(url, {
-            method: "get",
-            headers: {
-                "accept": "application/json",
-                "Authorization": `Basic ${authorization}`
-            }
-        });
-        resultDiv.innerHTML = "";
-        let lectures = await antwort.json();
-        // Abgerufene Daten anzeigen
-        lectures.forEach(lecture => {
-            let html = "<div>" +
-                    "<b>Vorlesungsname: </b>" + lecture.lectureName + "<br/>" +
-                    "<b>Dozent/-in: </b>" + lecture.lecturer + "<br/>" +
-                    "<b>Kurs: </b>" + lecture.course + "<br/>" +
-                    "</div>";
-            resultDiv.innerHTML += html;
-        });
+        this.getResults(url);
     }
 
     async getAllLectures() {
-        let resultDiv = document.getElementById("resultAll");
-        resultDiv.textContent = "Suche läuft …";
-        resultDiv.classList.remove("unsichtbar");
         let url = "https://localhost:8443/vorlesungsverwaltung/api/Lectures/all";
+        this.getResults(url);
+    }
 
+    async getResults(url) {
         if (this.username === "" || this.password === "") {
             alert("Bitte geben Sie Ihren Benutzernamen und Ihr Passwort ein!");
             return;
         }
-        let authorization = btoa(`${this.username}:${this.password}`);
-        let antwort = await fetch(url, {
-            method: "get",
-            headers: {
-                "accept": "application/json",
-                "Authorization": `Basic ${authorization}`
-            }
-        });
+        try {
+            let authorization = btoa(`${this.username}:${this.password}`);
+            let antwort = await fetch(url, {
+                method: "get",
+                headers: {
+                    "accept": "application/json",
+                    "Authorization": `Basic ${authorization}`
+                }
+            });
+            let lectures = await antwort.json();
+            this.printResults(lectures);
+        } catch (e) {
+            alert("Konnte keine Ergebnisse vom REST-Service bekommen. Sind Ihre Benutzerdaten korrekt?");
+            return;
+        }
+    }
+
+    async printResults(lectures) {
+        let resultDiv = document.getElementById("result");
+        resultDiv.classList.remove("unsichtbar");
         resultDiv.innerHTML = "";
-        let lectures = await antwort.json();
-        // Abgerufene Daten anzeigen
         lectures.forEach(lecture => {
             let html = "<div>" +
                     "<b>Vorlesungsname: </b>" + lecture.lectureName + "<br/>" +
