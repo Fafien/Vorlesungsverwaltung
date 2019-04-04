@@ -57,7 +57,7 @@
         <button id="searchAllLectures">Abrufen</button>
 
         <div>
-            <div id="resultAll" class="unsichtbar"></div>
+            <div id="result" class="unsichtbar"></div>
         </div>
     </jsp:attribute>
 </template:base>
