@@ -57,7 +57,7 @@ class Lecture {
             let html = "<div>" +
                     "<b>Vorlesungsname: </b>" + lecture.lectureName + "<br/>" +
                     "<b>Dozent/-in: </b>" + lecture.lecturer + "<br/>" +
-                    "<b>Kurs: </b>" + lecture.course + "<br/>" +
+                    "<b>Kurs: </b>" + lecture.course.courseName + "<br/>" +
                     "</div>";
             resultDiv.innerHTML += html;
         });

@@ -37,15 +37,17 @@
         <button class="icon-login" id="login">
             Einloggen
         </button>
+        </br>
 
         <label>Alle meine Vorlesungen</label>
-        </br>
         <input type="text" id="search" value="">
         <button id="searchLectures">Abrufen</button>
 
+        </br>
         <label>Alle heutigen Vorlesungen: </label>
         <button id="searchLecturesToday">Abrufen</button>
 
+        </br>
         <label>Alle Vorlesungen: </label>
         <button id="searchAllLectures">Abrufen</button>
 
