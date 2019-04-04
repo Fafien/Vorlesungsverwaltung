@@ -15,7 +15,9 @@
     </jsp:attribute>
 
     <jsp:attribute name="menu">
-
+        <div class="menuitem">
+            <a href="<c:url value="/logout/"/>">Einloggen</a>
+        </div>
     </jsp:attribute>
 
     <jsp:attribute name="content">
@@ -36,28 +38,19 @@
             Einloggen
         </button>
 
-        <h1>Alle meine Vorlesungen</h1>
-
+        <label>Alle meine Vorlesungen</label>
+        </br>
         <input type="text" id="search" value="">
         <button id="searchLectures">Abrufen</button>
 
-        <div>
-            <div id="result" class="unsichtbar"></div>
-        </div>
-        <h1>Alle heutigen Vorlesungen</h1>
-
+        <label>Alle heutigen Vorlesungen: </label>
         <button id="searchLecturesToday">Abrufen</button>
 
-        <div>
-            <div id="resultToday" class="unsichtbar"></div>
-        </div>
-
-        <h1>Alle Vorlesungen</h1>
-
+        <label>Alle Vorlesungen: </label>
         <button id="searchAllLectures">Abrufen</button>
 
         <div>
-            <div id="resultAll" class="unsichtbar"></div>
+            <div id="result" class="unsichtbar"></div>
         </div>
     </jsp:attribute>
 </template:base>
