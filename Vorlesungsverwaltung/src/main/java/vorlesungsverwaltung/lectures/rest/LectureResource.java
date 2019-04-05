@@ -1,17 +1,6 @@
-/*
- * Copyright © 2019 Dennis Schulmeister-Zimolong
- *
- * E-Mail: dhbw@windows3.de
- * Webseite: https://www.wpvs.de/
- *
- * Dieser Quellcode ist lizenziert unter einer
- * Creative Commons Namensnennung 4.0 International Lizenz.
- */
+
 package vorlesungsverwaltung.lectures.rest;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;

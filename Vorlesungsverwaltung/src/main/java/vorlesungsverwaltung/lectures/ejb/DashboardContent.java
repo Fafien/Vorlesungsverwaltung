@@ -1,3 +1,4 @@
+
 package vorlesungsverwaltung.lectures.ejb;
 
 import vorlesungsverwaltung.common.web.WebUtils;

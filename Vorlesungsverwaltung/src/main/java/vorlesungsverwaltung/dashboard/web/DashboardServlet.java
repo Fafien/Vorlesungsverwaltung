@@ -1,3 +1,4 @@
+
 package vorlesungsverwaltung.dashboard.web;
 
 import vorlesungsverwaltung.dashboard.ejb.DashboardContentProvider;

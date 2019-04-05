@@ -1,3 +1,4 @@
+
 package vorlesungsverwaltung.lectures.jpa;
 
 import java.io.Serializable;
