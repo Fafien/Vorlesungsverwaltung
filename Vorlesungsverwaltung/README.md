@@ -7,6 +7,8 @@ Kurzbeschreibung
 Diese Anwendung wurde im Rahmen der Vorlesung "Verteilte Systeme" an der DHBW 
 Karlsruhe realisiert. Es handelt ist um eine in Java realisierte, serverseitige
 MVC-Webanwendung. 
+Der Zweck der Anwendung ist eine Verwaltung von Vorlesungen und Terminen, die
+einem Kurs zugeteilt werden können.
 Die Anwendung setzt dabei ganz klassisch auf der „Jakarta Enterprise Edition”
 auf und läuft daher in einem speziell dafür ausgelegten Applikationsserver. 
 Sämtliche Anwendungslogik wird dabei vom Server implementiert, so dass für 
